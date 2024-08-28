@@ -2,18 +2,19 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { useFormState } from 'react-dom';
-import { updateCategoryAction } from '@/actions/categoryAction';
 import { Category } from '@/types/category'
 import ValidateError from '@/components/ui/validate-error';
 import RadioBoxComponent from '@/components/ui/radiobox';
+import { updateRatingCategoryAction } from '@/actions/ratingCategoryAction';
+import { RatingCategory } from '@/types/rating-category';
 
 export default function CategoryEdit({
     category,
   }: {
-    category: Category;
+    category: RatingCategory;
   }) {
   const initialState = { errors: {} };
-  const updateCategoryID = updateCategoryAction.bind(null, category.id);
+  const updateCategoryID = updateRatingCategoryAction.bind(null, category.id);
   const [state, dispatch] = useFormState(updateCategoryID, initialState);
 
   return (

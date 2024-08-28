@@ -1,8 +1,9 @@
 'use server'
 import { redirect } from 'next/navigation';
 import { CategorySchema } from '@/schemas/CategorySchema';
-import { revalidatePath, revalidateTag } from 'next/cache';
-import { deleteCategory, deleteEntity, insertCategory, updateCategory } from '@/routes/api';
+import { revalidatePath } from 'next/cache';
+import { insertRatingCategory, updateRatingCategory } from '@/routes/api';
+import { RatingCategorySchema } from '@/schemas/RatingCategorySchema';
 
 export type State = {
   errors?: {
@@ -11,8 +12,8 @@ export type State = {
   };
 };
 
-export async function createCategoryAction(prevState: State, formData: FormData) {
-    const validatedFields = CategorySchema.safeParse({
+export async function createRatingCategoryAction(prevState: State, formData: FormData) {
+    const validatedFields = RatingCategorySchema.safeParse({
         name_en: formData.get('name_en'),
         name_mm: formData.get('name_mm'),
         is_active: formData.get('is_active'),
@@ -28,22 +29,23 @@ export async function createCategoryAction(prevState: State, formData: FormData)
     // const { name_en, name_mm } = validatedFields.data;
 
     try {
-        await insertCategory(validatedFields.data);
+        await insertRatingCategory(validatedFields.data);
 
     } catch (error) {
         return {
             message: error,
         };
     }
-    // revalidateTag('/dashboard/categories')
-    revalidatePath('/dashboard/categories');
-    redirect('/dashboard/categories');
+
+    revalidatePath('/dashboard/rating-categories');
+    redirect('/dashboard/rating-categories');
     
 }
 
-export async function updateCategoryAction(
-    id : string, prevState: State, formData: FormData) {
-    const validatedFields = CategorySchema.safeParse({
+export async function updateRatingCategoryAction(
+    id : string, prevState: State, formData: FormData
+) {
+    const validatedFields = RatingCategorySchema.safeParse({
         name_en: formData.get('name_en'),
         name_mm: formData.get('name_mm'),
         is_active : formData.get('is_active')
@@ -59,15 +61,15 @@ export async function updateCategoryAction(
     // const { name_en, name_mm } = validatedFields.data;
 
     try {
-        await updateCategory(id, validatedFields.data);
+        await updateRatingCategory(id, validatedFields.data);
 
     } catch (error) {
         return {
             message: error,
         };
     }
-    // revalidateTag('/dashboard/categories')
-    revalidatePath('/dashboard/categories');
-    redirect('/dashboard/categories');
+
+    revalidatePath('/dashboard/rating-categories');
+    redirect('/dashboard/rating-categories');
     
 }

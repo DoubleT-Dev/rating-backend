@@ -1,14 +1,11 @@
-import RevenueChart from '@/components/ui/dashboard/revenue-chart';
-import LatestInvoices from '@/components/ui/dashboard/latest-invoices';
 import { lusitana } from '@/components/ui/fonts';
 // import { fetchCardData } from '@/app/lib/data';
 import { Suspense } from 'react';
 import { RevenueChartSkeleton, LatestInvoicesSkeleton, CardsSkeleton } from '@/components/ui/skeletons';
-import CardWrapper from '@/components/ui/dashboard/cards';
 import { Metadata } from 'next';
  
 export const metadata: Metadata = {
-  title: 'Dashboard | Acme Dashboard',
+  title: 'Dashboard | Rating Dashboard',
 };
 
 export default async function Page() {

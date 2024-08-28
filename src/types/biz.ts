@@ -5,6 +5,8 @@ export type Biz = {
     name_en: string;
     name_mm: string;
     categories_id : string;
+    is_active : boolean;
+    // description : string
     // categories: Category
   };
   

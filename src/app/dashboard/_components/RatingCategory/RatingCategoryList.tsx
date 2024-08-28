@@ -1,15 +1,18 @@
-import Image from 'next/image';
-import { UpdateInvoice } from '@/components/ui/invoices/buttons';
-import { fetchCategoryPagination } from '@/routes/api';
+import { DeleteCategory, DeleteRatingCategory, UpdateButton } from '@/components/ui/action-button';
+import Status from '@/components/ui/status';
+import { RatingCategory } from '@/types/rating-category';
 
-export default async function InvoicesTable({
+export default async function CategoryList({
   query,
   currentPage,
+  ratingCategories,
+  totalPages
 }: {
   query: string;
   currentPage: number;
+  ratingCategories : RatingCategory []
+  totalPages : number
 }) {
-  const { data, totalPages} = await fetchCategoryPagination(currentPage, query);
 
   return (
   <div className="mt-6 flow-root">
@@ -19,11 +22,14 @@ export default async function InvoicesTable({
         <table className="min-w-full text-gray-900">
           <thead className="rounded-lg text-left text-sm font-normal">
             <tr>
-              <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
-                Name En
+              <th scope="col" className="px-3 py-5 font-medium">
+              Rating Category Name (English)
               </th>
               <th scope="col" className="px-3 py-5 font-medium">
-                Name MM
+              Rating Category Name (Myanmar)
+              </th>
+              <th scope="col" className="px-3 py-5 font-medium">
+              Status
               </th>
               {/* Hide on smaller screens using hidden sm:table-cell */}
               <th scope="col" className="relative py-3 pl-6 pr-3 hidden sm:table-cell">
@@ -32,24 +38,29 @@ export default async function InvoicesTable({
             </tr>
           </thead>
           <tbody className="bg-white">
-            {data?.map((invoice) => (
+            {ratingCategories?.map((category) => (
               <tr
-                key={invoice.id}
+                key={category.id}
                 className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
               >
                 <td className="whitespace-nowrap px-3 py-3">
-                  {invoice.name_en}
+                  {category.name_en}
                 </td>
                 <td className="whitespace-nowrap px-3 py-3">
-                  {invoice.name_mm}
+                  {category.name_mm}
+                </td>
+                <td className="whitespace-nowrap px-3 py-3">
+                    <Status status={category.is_active} />
                 </td>
                 {/* Hide on smaller screens using hidden sm:table-cell */}
                 <td className="whitespace-nowrap py-3 pl-6 pr-3 hidden sm:table-cell">
                   <div className="flex justify-end gap-3">
                     {/* Update and delete buttons will show on larger screens */}
-                    <UpdateInvoice id={invoice.id} />
-                    <UpdateInvoice id={invoice.id} />
-                    {/* <DeleteInvoice id={invoice.id} /> */}
+                    <UpdateButton 
+                        routeName={`/dashboard/rating-categories/${category.id}/edit`}
+                     />
+                    
+                    <DeleteRatingCategory  id={category.id}/>
                   </div>
                 </td>
               </tr>

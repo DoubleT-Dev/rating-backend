@@ -1,9 +1,10 @@
-
+'use client'
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import React, { useState } from 'react';
-import { deleteBiz, deleteCategory, deleteEntity } from '@/routes/api';
+import { deleteBiz, deleteCategory, deleteEntity, deleteRatingCategory } from '@/routes/api';
 import toast from 'react-hot-toast';
+import Modal from './modal';
 
 export function CreateButton(
     {btnName , routeName } : 
@@ -35,28 +36,119 @@ return (
 }
 
 export function DeleteCategory({ id }: { id: string }) {
-  const deleteWithId = deleteCategory.bind(null, id);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleDeleteClick = (event: React.FormEvent) => {
+      event.preventDefault();
+      setIsModalOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    deleteCategory(id); // Call your delete function here
+    setIsModalOpen(false); // Close the modal after deletion
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false); // Close the modal without deleting
+  };
 
   return (
-    <form action={deleteWithId}>
-      <button className="rounded-md border p-2 bg-red-500 hover:bg-red-700">
-        <span className="sr-only">Delete</span>
-        <TrashIcon className="w-4 text-white" />
-      </button>
-    </form>
+    <>
+      <form onSubmit={handleDeleteClick}>
+        <button className="rounded-md border p-2 bg-red-500 hover:bg-red-700">
+          <span className="sr-only">Delete</span>
+          <TrashIcon className="w-4 text-white" />
+        </button>
+      </form>
+
+      <Modal
+      isOpen={isModalOpen}
+      onClose={handleCloseModal}
+      onConfirm={handleConfirmDelete}
+      title="Confirm Deletion"
+      message="Are you sure you want to delete this item?"
+      />
+    </>
   );
 }
 
 export function DeleteBiz({ id }: { id: string }) {
-  const deleteID = deleteBiz.bind(null, id);
+  // const deleteID = deleteBiz.bind(null, id);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleDeleteClick = (event: React.FormEvent) => {
+      event.preventDefault();
+      setIsModalOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    deleteBiz(id); // Call your delete function here
+    setIsModalOpen(false); // Close the modal after deletion
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false); // Close the modal without deleting
+  };
 
   return (
-    <form action={deleteID}>
+    <>
+    <form onSubmit={handleDeleteClick}>
       <button className="rounded-md border p-2 bg-red-500 hover:bg-red-700">
         <span className="sr-only">Delete</span>
         <TrashIcon className="w-4 text-white" />
       </button>
     </form>
+
+    <Modal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onConfirm={handleConfirmDelete}
+        title="Confirm Deletion"
+        message="Are you sure you want to delete this item?"
+      />
+      </>
+  );
+}
+
+export function DeleteRatingCategory({ id }: { id: string }) {
+  // const deleteWithId = deleteRatingCategory.bind(null, id);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleDeleteClick = (event: React.FormEvent) => {
+    event.preventDefault();
+    setIsModalOpen(true); // Open the modal when the delete button is clicked
+  };
+
+  const handleConfirmDelete = () => {
+    deleteRatingCategory(id); // Call your delete function here
+    setIsModalOpen(false); // Close the modal after deletion
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false); // Close the modal without deleting
+  };
+
+  return (
+    <>
+    <form onSubmit={handleDeleteClick}>
+      <button className="rounded-md border p-2 bg-red-500 hover:bg-red-700">
+        <span className="sr-only">Delete</span>
+        <TrashIcon className="w-4 text-white" />
+      </button>
+    </form>
+
+    <Modal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onConfirm={handleConfirmDelete}
+        title="Confirm Deletion"
+        message="Are you sure you want to delete this item?"
+      />
+    </>
+
   );
 }
 

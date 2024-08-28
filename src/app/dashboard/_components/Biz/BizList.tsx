@@ -1,4 +1,5 @@
 import { DeleteBiz, UpdateButton } from '@/components/ui/action-button';
+import Status from '@/components/ui/status';
 import { fetchBizPagination } from '@/routes/api';
 
 export default async function CategoryList({
@@ -18,14 +19,17 @@ export default async function CategoryList({
         <table className="min-w-full text-gray-900">
           <thead className="rounded-lg text-left text-sm font-normal">
             <tr>
-              <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
+              <th scope="col" className="px-3 py-5 font-medium">
               Category Name
               </th>
-              <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
+              <th scope="col" className="px-3 py-5 font-medium">
               Biz Name (English)
               </th>
               <th scope="col" className="px-3 py-5 font-medium">
               Biz Name (Myanmar)
+              </th>
+              <th scope="col" className="px-3 py-5 font-medium">
+              Status
               </th>
               {/* Hide on smaller screens using hidden sm:table-cell */}
               <th scope="col" className="relative py-3 pl-6 pr-3 hidden sm:table-cell">
@@ -48,6 +52,9 @@ export default async function CategoryList({
                 </td>
                 <td className="whitespace-nowrap px-3 py-3">
                   {biz.name_mm}
+                </td>
+                <td className="whitespace-nowrap px-3 py-3">
+                  <Status status={biz.is_active}/>
                 </td>
                 {/* Hide on smaller screens using hidden sm:table-cell */}
                 <td className="whitespace-nowrap py-3 pl-6 pr-3 hidden sm:table-cell">

@@ -1,12 +1,14 @@
 'use client';
 import Link from 'next/link';
-import {
-  DocumentDuplicateIcon
-} from '@heroicons/react/24/outline';
+import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
 import { Button } from '@/components/ui/button';
 import { useFormState } from 'react-dom';
 import { createBizAction } from '@/actions/bizAction';
 import { Category } from '@/types/category';
+import CheckboxComponent from '@/components/ui/checkbox';
+import { stat } from 'fs';
+import RadioBoxComponent from '@/components/ui/radiobox';
+import ValidateError from '@/components/ui/validate-error';
 
 export default function BizCreate({
     categories
@@ -39,16 +41,9 @@ export default function BizCreate({
                     </option>
                 ))}
                 </select>
-                <DocumentDuplicateIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+                <MagnifyingGlassIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
             </div>
-            <div id="categories-id-error" aria-live="polite" aria-atomic="true">
-            {state.errors?.categories_id &&
-              state.errors.categories_id.map((error: string) => (
-                <p className="mt-2 text-sm text-red-500" key={error}>
-                  {error}
-                </p>
-              ))}
-          </div>
+            <ValidateError id="categories_id" message={state.errors?.categories_id}/>
         </div>
 
         {/* Biz name (English) */}
@@ -68,14 +63,7 @@ export default function BizCreate({
               />
               {/* <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" /> */}
             </div>
-            <div id="name-en-error" aria-live="polite" aria-atomic="true">
-              {state.errors?.name_en &&
-                state.errors.name_en.map((error: string) => (
-                  <p className="mt-2 text-sm text-red-500" key={error}>
-                    {error}
-                  </p>
-                ))}
-            </div>
+            <ValidateError id='name_en' message={state.errors?.name_en}/>
           </div>
         </div>
 
@@ -96,18 +84,14 @@ export default function BizCreate({
               />
               {/* <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" /> */}
             </div>
-            <div id="name-mm-error" aria-live="polite" aria-atomic="true">
-              {state.errors?.name_mm &&
-                state.errors.name_mm.map((error: string) => (
-                  <p className="mt-2 text-sm text-red-500" key={error}>
-                    {error}
-                  </p>
-                ))}
-            </div>
+            <ValidateError id='name_mm' message={state.errors?.name_mm}/>
           </div>
         </div>
 
+        <RadioBoxComponent status={true}/>
+
       </div>
+
       <div className="mt-6 flex justify-start gap-4">
         <Button type="submit">Create</Button>
         <Link

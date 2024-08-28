@@ -9,15 +9,19 @@ export type State = {
         name_en?: string[];
         name_mm?: string[];
         categories?: string[];
+        // is_active? : boolean[];
+        // description? : string[];
     };
 };
   
 export async function createBizAction(prevState: State, formData: FormData) {
-    console.log(formData.get('categories_id'));
+
         const validatedFields = BizSchema.safeParse({
             name_en: formData.get('name_en'),
             name_mm: formData.get('name_mm'),
             categories_id: formData.get('categories_id'),
+            is_active: formData.get('is_active'),
+            // description: formData.get('description'),
         });
 
         if (!validatedFields.success) {
@@ -26,7 +30,7 @@ export async function createBizAction(prevState: State, formData: FormData) {
             };
         }
 
-        const { name_en, name_mm, categories_id } = validatedFields.data;
+        // const { name_en, name_mm, categories_id } = validatedFields.data;
 
         try {
             await insertBiz(validatedFields.data);
@@ -49,6 +53,7 @@ export async function updateBizAction(
         name_en: formData.get('name_en'),
         name_mm: formData.get('name_mm'),
         categories_id: formData.get('categories_id'),
+        is_active: formData.get('is_active'),
     });
 
     if (!validatedFields.success) {
@@ -57,8 +62,6 @@ export async function updateBizAction(
             errors: validatedFields.error.flatten().fieldErrors,
         };
     }
-
-    const { name_en, name_mm, categories_id } = validatedFields.data;
 
     try {
         const data = await updateBiz(id, validatedFields.data);

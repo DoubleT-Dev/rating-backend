@@ -5,7 +5,9 @@ import { useFormState } from 'react-dom';
 import { updateBizAction } from '@/actions/bizAction';
 import { Biz } from '@/types/biz'
 import { Category } from '@/types/category';
-import { DocumentDuplicateIcon } from '@heroicons/react/16/solid';
+import { MagnifyingGlassIcon } from '@heroicons/react/16/solid';
+import RadioBoxComponent from '@/components/ui/radiobox';
+import ValidateError from '@/components/ui/validate-error';
 
 export default function BizEdit({
     biz,
@@ -15,7 +17,6 @@ export default function BizEdit({
     categories: Category[] | null;
   }) {
   const initialState = { errors: {} };
-  console.log(biz);
   const updateBizID = updateBizAction.bind(null, biz.id);
   const [state, dispatch] = useFormState(updateBizID, initialState);
 
@@ -42,16 +43,9 @@ export default function BizEdit({
                     </option>
                 ))}
                 </select>
-                <DocumentDuplicateIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+                <MagnifyingGlassIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
             </div>
-            <div id="categories-id-error" aria-live="polite" aria-atomic="true">
-            {state.errors?.categories_id &&
-              state.errors.categories_id.map((error: string) => (
-                <p className="mt-2 text-sm text-red-500" key={error}>
-                  {error}
-                </p>
-              ))}
-          </div>
+            <ValidateError id='categories_id' message={state.errors?.categories_id}/>
         </div>
 
         {/* Biz name (English) */}
@@ -72,21 +66,14 @@ export default function BizEdit({
               />
               {/* <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" /> */}
             </div>
-            <div id="name-en-error" aria-live="polite" aria-atomic="true">
-              {state.errors?.name_en &&
-                state.errors.name_en.map((error: string) => (
-                  <p className="mt-2 text-sm text-red-500" key={error}>
-                    {error}
-                  </p>
-                ))}
-            </div>
+            <ValidateError id='name_en' message={state.errors?.name_en}/>
           </div>
         </div>
 
-        {/* Category Name (Myanmar) */}
+        {/* Biz Name (Myanmar) */}
         <div className="mb-4">
           <label htmlFor="name_en" className="mb-2 block text-sm font-medium">
-           Category Name ( Myanmar )
+           Biz Name ( Myanmar )
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
@@ -101,16 +88,11 @@ export default function BizEdit({
               />
               {/* <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" /> */}
             </div>
-            <div id="name-mm-error" aria-live="polite" aria-atomic="true">
-              {state.errors?.name_mm &&
-                state.errors.name_mm.map((error: string) => (
-                  <p className="mt-2 text-sm text-red-500" key={error}>
-                    {error}
-                  </p>
-                ))}
-            </div>
+            <ValidateError id='name_mm' message={state.errors?.name_mm}/>
           </div>
         </div>
+
+        <RadioBoxComponent status={biz.is_active}/>
 
       </div>
       <div className="mt-6 flex justify-start gap-4">

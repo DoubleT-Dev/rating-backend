@@ -3,7 +3,7 @@
 import { lusitana } from '@/components/ui/fonts';
 import { AtSymbolIcon, KeyIcon, ExclamationCircleIcon } from '@heroicons/react/24/outline';
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
-import { Button } from './button';
+import { Button } from '../../components/ui/button';
 import { useState, FormEvent } from 'react'; // Use useState for error handling
 import { login } from "@/app/login/action";
 import { useFormStatus } from 'react-dom';

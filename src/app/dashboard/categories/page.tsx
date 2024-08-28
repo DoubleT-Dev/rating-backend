@@ -39,9 +39,9 @@ export default async function Page({
         <Suspense key={query + currentPage} fallback={<CategoriesTableSkeleton />}>
         <CategoryList 
             categories={data} 
-            totalPages={totalPages} 
-            query={query} 
-            currentPage={currentPage} 
+            // totalPages={totalPages} 
+            // query={query} 
+            // currentPage={currentPage} 
         />
       </Suspense>
       <div className="mt-5 flex w-full justify-center">

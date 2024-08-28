@@ -2,19 +2,13 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { useFormState } from 'react-dom';
-import { updateCategoryAction } from '@/actions/categoryAction';
-import { Category } from '@/types/category'
 import ValidateError from '@/components/ui/validate-error';
 import RadioBoxComponent from '@/components/ui/radiobox';
+import { createRatingCategoryAction } from '@/actions/ratingCategoryAction';
 
-export default function CategoryEdit({
-    category,
-  }: {
-    category: Category;
-  }) {
+export default function RatingCategoryCreate() {
   const initialState = { errors: {} };
-  const updateCategoryID = updateCategoryAction.bind(null, category.id);
-  const [state, dispatch] = useFormState(updateCategoryID, initialState);
+  const [state, dispatch] = useFormState(createRatingCategoryAction, initialState);
 
   return (
     <form action={dispatch} >
@@ -23,7 +17,7 @@ export default function CategoryEdit({
         {/* Category name (English) */}
         <div className="mb-4">
           <label htmlFor="name_en" className="mb-2 block text-sm font-medium">
-           Category Name ( English )
+           Rating Category Name ( English )
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
@@ -31,8 +25,7 @@ export default function CategoryEdit({
                 id="name_en"
                 name="name_en"
                 type="text"
-                defaultValue={category.name_en}
-                placeholder="Enter Category Name (English)"
+                placeholder="Enter Rating Category Name (English)"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-3 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="name-en-error"
               />
@@ -45,7 +38,7 @@ export default function CategoryEdit({
         {/* Category Name (Myanmar) */}
         <div className="mb-4">
           <label htmlFor="name_en" className="mb-2 block text-sm font-medium">
-           Category Name ( Myanmar )
+           Rating Category Name ( Myanmar )
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
@@ -53,8 +46,7 @@ export default function CategoryEdit({
                 id="name_mm"
                 name="name_mm"
                 type="text"
-                defaultValue={category.name_mm}
-                placeholder="Enter Category Name (Myanmar)"
+                placeholder="Enter Rating Category Name (Myanmar)"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-3 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="name-mm-error"
               />
@@ -64,13 +56,13 @@ export default function CategoryEdit({
           </div>
         </div>
 
-        <RadioBoxComponent status={category.is_active}/>
+        <RadioBoxComponent status={true}/>
 
       </div>
       <div className="mt-6 flex justify-start gap-4">
-        <Button type="submit">Update</Button>
+        <Button type="submit">Create</Button>
         <Link
-          href="/dashboard/categories"
+          href="/dashboard/rating-categories"
           className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
         >
           Cancel

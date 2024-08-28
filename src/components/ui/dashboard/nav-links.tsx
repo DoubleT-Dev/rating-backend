@@ -6,24 +6,22 @@ import {
   DocumentDuplicateIcon,
   BuildingStorefrontIcon,
   StarIcon,
+  ListBulletIcon,
 } from '@heroicons/react/24/outline';
+// import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid'
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
 
 // Map of links to display in the side navigation.
-// Depending on the size of the application, this would be stored in a database.
 const links = [
   { name: 'Home', href: '/dashboard', icon: HomeIcon },
-  {
-    name: 'Categories',
-    href: '/dashboard/categories',
-    icon: DocumentDuplicateIcon,
-  },
-  { name: 'Customers', href: '/dashboard/customers', icon: UserGroupIcon },
+  // { name: 'Customers', href: '/dashboard/customers', icon: UserGroupIcon },
+  { name: 'Categories', href: '/dashboard/categories', icon: DocumentDuplicateIcon},
   { name: 'Biz', href: '/dashboard/bizs', icon: BuildingStorefrontIcon },
-  { name: 'Rating', href: '/dashboard/ratings', icon: StarIcon },
-];
+  { name: 'Rating Category', href: '/dashboard/rating-categories', icon: ListBulletIcon },
+  // { name: 'Rating', href: '/dashboard/ratings', icon: StarIcon },
+]
 
 export default function NavLinks() {
   const pathname = usePathname();

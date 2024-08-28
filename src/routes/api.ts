@@ -1,5 +1,5 @@
 'use server'
-import { calculatePagination } from '@/utils/pagination';
+import { calculatePagination } from '@/app/lib/utils';
 import  { createClient }  from '@/utils/supabase/server';
 import { unstable_noStore as noStore, revalidatePath } from 'next/cache';
 
@@ -45,7 +45,7 @@ export const fetchBizPagination = async (
     const { from, to } = calculatePagination(page);
     const supabase = createClient()
     const { data, error, count } = await supabase.from('bizs')
-            .select('id, name_en, name_mm, categories_id, categories (name_en)', { count: 'exact' }).ilike('name_en', `%${query}%`) // Ensure to get the exact count
+            .select('id, name_en, name_mm, categories_id, is_active, categories (name_en)', { count: 'exact' }).ilike('name_en', `%${query}%`) // Ensure to get the exact count
             .range(from, to);
 
     if (error) { throw new Error(error.message); }
@@ -74,7 +74,7 @@ export const fetchBizById = async (id: string) => {
   const supabase = createClient()
   const { data, error } = await supabase
     .from('bizs')
-    .select('id, name_en, name_mm, categories_id')
+    .select('*')
     .eq('id', id)
     .single();
 
@@ -213,9 +213,9 @@ export const fetchCategoryById = async (id: string) => {
 
 export const deleteCategory = async (id: string) => {
   const supabase = createClient()
+  console.log(id);
   try {
     const { data, error } = await supabase.from('categories').delete().eq('id', id).select();
-
     if (error) {
       throw new Error('Failed to delete Biz');
     }
@@ -236,31 +236,78 @@ export const deleteCategory = async (id: string) => {
 
 // =====================================
 
-
-
-export const fetchRatingCategory = async (page: number, pageSize : number) => {
+export const fetchRatingCategoryPagination = async (page : number, query : string) => {
   noStore();
-  const { from, to } = calculatePagination(page);
+    // await new Promise((resolve) => setTimeout(resolve, 3000));
+    const { from, to } = calculatePagination(page);
+    
+    const supabase = createClient()
+    const { data, error, count } = await supabase.from('rating_categories')
+            .select('*', { count: 'exact' }).ilike('name_en', `%${query}%`) // Ensure to get the exact count
+            .range(from, to);
+
+    const totalPages = Math.ceil((count || 1) / PAGE_SIZE);
+
+    if (error) { throw new Error(error.message); }
+
+    return { data, totalPages };
+};
+
+
+export const insertRatingCategory = async (categoryData: {
+  name_en: string;
+  name_mm: string;
+}) => {
+  const supabase = createClient()
+  const { data, error } = await supabase.from('rating_categories').insert([categoryData]).select();
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data;
+};
+
+export const updateRatingCategory = async (id : string , ratingCategoryData: {
+  name_en: string;
+  name_mm: string;
+}) => {
+  const supabase = createClient();
+
+  const { data } = await supabase.from('rating_categories').update([ratingCategoryData]).eq('id', id).select();
+
+  return data;
+};
+
+export const fetchRatingCategoryById = async (id: string) => {
+  const supabase = createClient()
+  const { data, error } = await supabase
+    .from('rating_categories')
+    .select('*')
+    .eq('id', id)
+    .single();
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data;
+};
+
+export const deleteRatingCategory = async (id: string) => {
   const supabase = createClient()
   try {
-      const { data, error, count } = await supabase
-          .from('rating_categories')
-          .select('*', { count: 'exact' }) // Ensure to get the exact count
-          .range(from, to);
+    const { data, error } = await supabase.from('rating_categories').delete().eq('id', id).select();
 
-      if (error) {
-          throw new Error(`Error fetching data: ${error.message}`);
-      }
+    if (error) {
+      throw new Error('Failed to delete Biz');
+    }
 
-      // Check if data is undefined or null
-      if (!data) {
-          throw new Error('No data found');
-      }
+    revalidatePath('/dashboard/rating-categoreis');
+    return { message: 'Deleted Rating Categories.' };
 
-      return { data, count };
-  } catch (err) {
-      // Handle or log the error as needed
-      console.error(err);
-      throw err;
+  } catch (error) {
+    // console.error('Error deleting Biz:');
   }
+
 };
