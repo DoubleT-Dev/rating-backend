@@ -7,7 +7,7 @@ export const BizSchema = z.object({
   name_en: z.string().nonempty({ message: "English name is required" }),
   name_mm: z.string().nonempty({ message: "Myanmar name is required" }),
   is_active : z.string().nullable(),
-  // description: z.string().nullable(),
+  description: z.string().nullable(),
 });
 
 export type BizSchemaType = z.infer<typeof BizSchema>;

@@ -6,7 +6,7 @@ export type Biz = {
     name_mm: string;
     categories_id : string;
     is_active : boolean;
-    // description : string
+    description : string
     // categories: Category
   };
   

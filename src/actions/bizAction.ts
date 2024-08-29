@@ -21,7 +21,7 @@ export async function createBizAction(prevState: State, formData: FormData) {
             name_mm: formData.get('name_mm'),
             categories_id: formData.get('categories_id'),
             is_active: formData.get('is_active'),
-            // description: formData.get('description'),
+            description: formData.get('description'),
         });
 
         if (!validatedFields.success) {
@@ -54,6 +54,7 @@ export async function updateBizAction(
         name_mm: formData.get('name_mm'),
         categories_id: formData.get('categories_id'),
         is_active: formData.get('is_active'),
+        description: formData.get('description'),
     });
 
     if (!validatedFields.success) {

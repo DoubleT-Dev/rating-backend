@@ -2,7 +2,7 @@ import { DeleteBiz, UpdateButton } from '@/components/ui/action-button';
 import Status from '@/components/ui/status';
 import { fetchBizPagination } from '@/routes/api';
 
-export default async function CategoryList({
+export default async function BizList({
   query,
   currentPage,
 }: {

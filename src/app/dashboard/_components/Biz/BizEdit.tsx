@@ -8,6 +8,7 @@ import { Category } from '@/types/category';
 import { MagnifyingGlassIcon } from '@heroicons/react/16/solid';
 import RadioBoxComponent from '@/components/ui/radiobox';
 import ValidateError from '@/components/ui/validate-error';
+import { useState } from 'react';
 
 export default function BizEdit({
     biz,
@@ -19,7 +20,13 @@ export default function BizEdit({
   const initialState = { errors: {} };
   const updateBizID = updateBizAction.bind(null, biz.id);
   const [state, dispatch] = useFormState(updateBizID, initialState);
+  const [textareaValue, setTextareaValue] = useState(biz.description); // State to store textarea value
 
+  // Function to handle input change
+  const handleInputChange = (event : any) => {
+    setTextareaValue(event.target.value); // Update state with the new value
+  };
+  
   return (
     <form action={dispatch} >
       <div className="rounded-md bg-blue-50 p-4 md:p-6">
@@ -64,7 +71,6 @@ export default function BizEdit({
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-3 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="name-en-error"
               />
-              {/* <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" /> */}
             </div>
             <ValidateError id='name_en' message={state.errors?.name_en}/>
           </div>
@@ -86,9 +92,29 @@ export default function BizEdit({
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-3 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="name-mm-error"
               />
-              {/* <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" /> */}
             </div>
             <ValidateError id='name_mm' message={state.errors?.name_mm}/>
+          </div>
+        </div>
+
+        {/* Description */}
+        <div className="mb-4">
+          <label htmlFor="name_en" className="mb-2 block text-sm font-medium">
+           Description
+          </label>
+          <div className="relative mt-2 rounded-md">
+            <div className="relative">
+              <textarea id="description"
+                rows={5}
+                name="description"
+                value={textareaValue}
+                onChange={handleInputChange}
+                placeholder="Enter Description"
+                className="peer block w-full rounded-md border border-gray-200 py-2 pl-3 text-sm outline-2 placeholder:text-gray-500"
+                aria-describedby="biz-error" />
+
+            </div>
+            <ValidateError id='description' message={state.errors?.description}/>
           </div>
         </div>
 

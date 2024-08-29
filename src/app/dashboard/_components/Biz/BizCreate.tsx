@@ -30,7 +30,7 @@ export default function BizCreate({
                     name="categories_id"
                     className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                     defaultValue=""
-                    aria-describedby="categories-id-error"
+                    aria-describedby="biz-error"
                 >
                 <option value="" disabled>
                     Select a category
@@ -59,9 +59,8 @@ export default function BizCreate({
                 type="text"
                 placeholder="Enter Biz Name (English)"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-3 text-sm outline-2 placeholder:text-gray-500"
-                aria-describedby="name-en-error"
+                aria-describedby="biz-error"
               />
-              {/* <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" /> */}
             </div>
             <ValidateError id='name_en' message={state.errors?.name_en}/>
           </div>
@@ -80,11 +79,29 @@ export default function BizCreate({
                 type="text"
                 placeholder="Enter Biz Name (Myanmar)"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-3 text-sm outline-2 placeholder:text-gray-500"
-                aria-describedby="name-mm-error"
+                aria-describedby="biz-error"
               />
-              {/* <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" /> */}
             </div>
             <ValidateError id='name_mm' message={state.errors?.name_mm}/>
+          </div>
+        </div>
+
+        {/* Description */}
+        <div className="mb-4">
+          <label htmlFor="name_en" className="mb-2 block text-sm font-medium">
+           Description
+          </label>
+          <div className="relative mt-2 rounded-md">
+            <div className="relative">
+              <textarea  id="description"
+                rows={5}
+                name="description"
+                placeholder="Enter Description"
+                className="peer block w-full rounded-md border border-gray-200 py-2 pl-3 text-sm outline-2 placeholder:text-gray-500"
+                aria-describedby="biz-error">
+                </textarea>
+            </div>
+            <ValidateError id='description' message={state.errors?.description}/>
           </div>
         </div>
 

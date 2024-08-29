@@ -311,3 +311,93 @@ export const deleteRatingCategory = async (id: string) => {
   }
 
 };
+
+
+// =====================================
+
+  /** Tag Route **/
+
+// =====================================
+
+export const fetchAllTag = async () => {
+  const supabase = createClient()
+    const { data, error } = await supabase.from('tags').select('*'); 
+    return data;
+};
+
+export const fetchTagPagination = async (
+  page : number, query : string
+  ) => {
+    noStore();
+    // await new Promise((resolve) => setTimeout(resolve, 3000));
+    const { from, to } = calculatePagination(page);
+    
+    const supabase = createClient()
+    const { data, error, count } = await supabase.from('tags')
+            .select('*', { count: 'exact' }).ilike('name_en', `%${query}%`) // Ensure to get the exact count
+            .range(from, to);;
+
+    const totalPages = Math.ceil((count || 1) / PAGE_SIZE);
+
+    if (error) { throw new Error(error.message); }
+
+    return { data, totalPages };
+};
+
+export const insertTag = async (categoryData: {
+  name_en: string;
+  name_mm: string;
+}) => {
+  const supabase = createClient()
+  const { data, error } = await supabase.from('tags').insert([categoryData]).select();
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data;
+};
+
+export const updateTag = async (id : string , categoryData: {
+  name_en: string;
+  name_mm: string;
+}) => {
+  const supabase = createClient();
+
+  const { data } = await supabase.from('tags').update([categoryData]).eq('id', id).select();
+
+  return data;
+};
+
+export const fetchTagById = async (id: string) => {
+  const supabase = createClient()
+  const { data, error } = await supabase
+    .from('tags')
+    .select('*')
+    .eq('id', id)
+    .single();
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data;
+};
+
+export const deleteTag = async (id: string) => {
+  const supabase = createClient()
+  console.log(id);
+  try {
+    const { data, error } = await supabase.from('tags').delete().eq('id', id).select();
+    if (error) {
+      throw new Error('Failed to delete Tag');
+    }
+
+    revalidatePath('/dashboard/tags');
+    return { message: 'Deleted Tags.' };
+
+  } catch (error) {
+    console.error('Error deleting Tag:');
+  }
+
+};

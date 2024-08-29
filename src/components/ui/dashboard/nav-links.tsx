@@ -7,6 +7,7 @@ import {
   BuildingStorefrontIcon,
   StarIcon,
   ListBulletIcon,
+  TagIcon,
 } from '@heroicons/react/24/outline';
 // import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid'
 import Link from 'next/link';
@@ -20,6 +21,7 @@ const links = [
   { name: 'Categories', href: '/dashboard/categories', icon: DocumentDuplicateIcon},
   { name: 'Biz', href: '/dashboard/bizs', icon: BuildingStorefrontIcon },
   { name: 'Rating Category', href: '/dashboard/rating-categories', icon: ListBulletIcon },
+  { name: 'Tag', href: '/dashboard/tags', icon: TagIcon },
   // { name: 'Rating', href: '/dashboard/ratings', icon: StarIcon },
 ]
 
