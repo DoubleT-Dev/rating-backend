@@ -2,7 +2,7 @@
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import React, { useState } from 'react';
-import { deleteBiz, deleteCategory, deleteEntity, deleteRatingCategory } from '@/routes/api';
+import { deleteBiz, deleteCategory, deleteEntity, deleteRatingCategory, deleteTag } from '@/routes/api';
 import toast from 'react-hot-toast';
 import Modal from './modal';
 
@@ -152,3 +152,41 @@ export function DeleteRatingCategory({ id }: { id: string }) {
   );
 }
 
+
+export function DeleteTag({ id }: { id: string }) {
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleDeleteClick = (event: React.FormEvent) => {
+      event.preventDefault();
+      setIsModalOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    deleteTag(id); // Call your delete function here
+    setIsModalOpen(false); // Close the modal after deletion
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false); // Close the modal without deleting
+  };
+
+  return (
+    <>
+      <form onSubmit={handleDeleteClick}>
+        <button className="rounded-md border p-2 bg-red-500 hover:bg-red-700">
+          <span className="sr-only">Delete</span>
+          <TrashIcon className="w-4 text-white" />
+        </button>
+      </form>
+
+      <Modal
+      isOpen={isModalOpen}
+      onClose={handleCloseModal}
+      onConfirm={handleConfirmDelete}
+      title="Confirm Deletion"
+      message="Are you sure you want to delete this item?"
+      />
+    </>
+  );
+}

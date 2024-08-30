@@ -20,6 +20,8 @@ export default function BizCreate({
 
   return (
     <form action={dispatch} >
+      {state.message && <ErrorPopup message={state.message} />}
+      
       <div className="rounded-md bg-blue-50 p-4 md:p-6">
 
         <div className="mb-4">

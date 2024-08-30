@@ -62,11 +62,7 @@ export const insertBiz = async (bizData: {
   const supabase = createClient()
   const { data, error } = await supabase.from('bizs').insert([bizData]).select();
 
-  if (error) {
-    throw new Error(error.message);
-  }
-
-  return data;
+  return { data, error };
 };
 
 // Read a single business by ID
@@ -94,10 +90,7 @@ export const updateBiz = async (id: string, bizData: {
   const supabase = createClient()
   const { data, error } = await supabase.from('bizs').update(bizData).eq('id', id).select();
   
-  if (error) {
-    throw new Error(error.message);
-  }
-  revalidatePath('/biz','layout');
+  return { data, error };
 };
 
 // Delete a business by ID
@@ -177,12 +170,7 @@ export const insertCategory = async (categoryData: {
 }) => {
   const supabase = createClient()
   const { data, error } = await supabase.from('categories').insert([categoryData]).select();
-
-  if (error) {
-    throw new Error(error.message);
-  }
-
-  return data;
+  return {data,error};
 };
 
 export const updateCategory = async (id : string , categoryData: {
@@ -191,9 +179,9 @@ export const updateCategory = async (id : string , categoryData: {
 }) => {
   const supabase = createClient();
 
-  const { data } = await supabase.from('categories').update([categoryData]).eq('id', id).select();
+  const { data, error } = await supabase.from('categories').update([categoryData]).eq('id', id).select();
 
-  return data;
+  return {data, error};
 };
 
 export const fetchCategoryById = async (id: string) => {
@@ -261,11 +249,7 @@ export const insertRatingCategory = async (categoryData: {
   const supabase = createClient()
   const { data, error } = await supabase.from('rating_categories').insert([categoryData]).select();
 
-  if (error) {
-    throw new Error(error.message);
-  }
-
-  return data;
+  return {data, error};
 };
 
 export const updateRatingCategory = async (id : string , ratingCategoryData: {
@@ -274,9 +258,9 @@ export const updateRatingCategory = async (id : string , ratingCategoryData: {
 }) => {
   const supabase = createClient();
 
-  const { data } = await supabase.from('rating_categories').update([ratingCategoryData]).eq('id', id).select();
+  const { data, error } = await supabase.from('rating_categories').update([ratingCategoryData]).eq('id', id).select();
 
-  return data;
+  return {data , error};
 };
 
 export const fetchRatingCategoryById = async (id: string) => {
@@ -325,6 +309,21 @@ export const fetchAllTag = async () => {
     return data;
 };
 
+export const fetchTagCount = async (
+  page : number, query : string
+  ) => {
+    noStore();
+    // await new Promise((resolve) => setTimeout(resolve, 3000));
+    const { from, to } = calculatePagination(page);
+    const supabase = createClient()
+    const { count } = await supabase.from('tags')
+            .select('*', { count: 'exact', head : true }).ilike('name_en', `%${query}%`);
+
+    const totalPages = Math.ceil((count || 0) / PAGE_SIZE);
+
+    return totalPages ;
+};
+
 export const fetchTagPagination = async (
   page : number, query : string
   ) => {
@@ -337,36 +336,35 @@ export const fetchTagPagination = async (
             .select('*', { count: 'exact' }).ilike('name_en', `%${query}%`) // Ensure to get the exact count
             .range(from, to);;
 
-    const totalPages = Math.ceil((count || 1) / PAGE_SIZE);
-
     if (error) { throw new Error(error.message); }
 
-    return { data, totalPages };
+    return data ;
 };
 
-export const insertTag = async (categoryData: {
+export const insertTag = async (tagData: {
   name_en: string;
   name_mm: string;
 }) => {
   const supabase = createClient()
-  const { data, error } = await supabase.from('tags').insert([categoryData]).select();
-
-  if (error) {
-    throw new Error(error.message);
-  }
-
-  return data;
+  const { data, error } = await supabase.from('tags').insert([tagData]).select();
+  return {data , error };
 };
 
-export const updateTag = async (id : string , categoryData: {
+export const updateTag = async (id : string , tagData: {
   name_en: string;
   name_mm: string;
 }) => {
+
   const supabase = createClient();
-
-  const { data } = await supabase.from('tags').update([categoryData]).eq('id', id).select();
-
-  return data;
+  
+  try {
+    const { data, error } = await supabase.from('tags').update([tagData]).eq('id', id).select();
+    return { data, error };
+  } catch (error) {
+    console.log(error);
+    return { message : error };
+  }
+  
 };
 
 export const fetchTagById = async (id: string) => {
@@ -386,9 +384,10 @@ export const fetchTagById = async (id: string) => {
 
 export const deleteTag = async (id: string) => {
   const supabase = createClient()
-  console.log(id);
+
   try {
     const { data, error } = await supabase.from('tags').delete().eq('id', id).select();
+
     if (error) {
       throw new Error('Failed to delete Tag');
     }

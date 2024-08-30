@@ -10,6 +10,7 @@ export type State = {
     name_en?: string[];
     name_mm?: string[];
   };
+  message?: string | null | unknown;
 };
 
 export async function createRatingCategoryAction(prevState: State, formData: FormData) {
@@ -29,11 +30,16 @@ export async function createRatingCategoryAction(prevState: State, formData: For
     // const { name_en, name_mm } = validatedFields.data;
 
     try {
-        await insertRatingCategory(validatedFields.data);
+        const {data , error } = await insertRatingCategory(validatedFields.data);
 
+        if(error) {
+            return {
+                message : error.message,
+            }
+        }
     } catch (error) {
         return {
-            message: error,
+            message: "Database Error.",
         };
     }
 
@@ -58,14 +64,17 @@ export async function updateRatingCategoryAction(
         };
     }
 
-    // const { name_en, name_mm } = validatedFields.data;
-
     try {
-        await updateRatingCategory(id, validatedFields.data);
+        const {data , error} = await updateRatingCategory(id, validatedFields.data);
 
+        if(error) {
+            return {
+                message : error.message,
+            }
+        }
     } catch (error) {
         return {
-            message: error,
+            message: "Database Error.",
         };
     }
 

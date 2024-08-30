@@ -10,6 +10,7 @@ import { useFormState } from 'react-dom';
 import { createCategoryAction } from '@/actions/categoryAction';
 import ValidateError from '@/components/ui/validate-error';
 import RadioBoxComponent from '@/components/ui/radiobox';
+import ErrorPopup from '@/components/ui/error-popup';
 
 export default function CategoryCreate() {
   const initialState = { errors: {} };
@@ -17,6 +18,8 @@ export default function CategoryCreate() {
 
   return (
     <form action={dispatch} >
+      {state.message && <ErrorPopup message={state.message} />}
+      
       <div className="rounded-md bg-blue-50 p-4 md:p-6">
 
         {/* Category name (English) */}

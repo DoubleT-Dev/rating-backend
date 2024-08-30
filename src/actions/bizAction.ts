@@ -12,6 +12,7 @@ export type State = {
         // is_active? : boolean[];
         // description? : string[];
     };
+    message?: string | null | unknown;
 };
   
 export async function createBizAction(prevState: State, formData: FormData) {
@@ -33,11 +34,16 @@ export async function createBizAction(prevState: State, formData: FormData) {
         // const { name_en, name_mm, categories_id } = validatedFields.data;
 
         try {
-            await insertBiz(validatedFields.data);
+            const {data , error } = await insertBiz(validatedFields.data);
     
+            if(error) {
+                return {
+                    message : error.message,
+                }
+            }
         } catch (error) {
             return {
-                message: error,
+                message: "Database Error.",
             };
         }
 
@@ -65,11 +71,16 @@ export async function updateBizAction(
     }
 
     try {
-        const data = await updateBiz(id, validatedFields.data);
+        const {data, error} = await updateBiz(id, validatedFields.data);
 
+        if(error) {
+            return {
+                message : error.message,
+            }
+        }
     } catch (error) {
         return {
-            message: error,
+            message: "Database Error.",
         };
     }
     

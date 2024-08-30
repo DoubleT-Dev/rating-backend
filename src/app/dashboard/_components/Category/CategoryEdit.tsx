@@ -6,6 +6,7 @@ import { updateCategoryAction } from '@/actions/categoryAction';
 import { Category } from '@/types/category'
 import ValidateError from '@/components/ui/validate-error';
 import RadioBoxComponent from '@/components/ui/radiobox';
+import ErrorPopup from '@/components/ui/error-popup';
 
 export default function CategoryEdit({
     category,
@@ -18,6 +19,8 @@ export default function CategoryEdit({
 
   return (
     <form action={dispatch} >
+      {state.message && <ErrorPopup message={state.message} />}
+      
       <div className="rounded-md bg-blue-50 p-4 md:p-6">
 
         {/* Category name (English) */}

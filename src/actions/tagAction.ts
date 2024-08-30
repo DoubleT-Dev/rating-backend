@@ -1,8 +1,9 @@
 'use server'
 import { redirect } from 'next/navigation';
-import { CategorySchema } from '@/schemas/CategorySchema';
-import { revalidatePath, revalidateTag } from 'next/cache';
-import { deleteCategory, deleteEntity, insertCategory, updateCategory } from '@/routes/api';
+import { revalidatePath } from 'next/cache';
+import { insertTag, updateTag } from '@/routes/api';
+import { TagSchema } from '@/schemas/TagSchema';
+import toast from 'react-hot-toast';
 
 export type State = {
   errors?: {
@@ -12,11 +13,10 @@ export type State = {
   message?: string | null | unknown;
 };
 
-export async function createCategoryAction(prevState: State, formData: FormData) {
-    const validatedFields = CategorySchema.safeParse({
+export async function createTagAction(prevState: State, formData: FormData) {
+    const validatedFields = TagSchema.safeParse({
         name_en: formData.get('name_en'),
         name_mm: formData.get('name_mm'),
-        is_active: formData.get('is_active'),
     });
 
     if (!validatedFields.success) {
@@ -27,45 +27,42 @@ export async function createCategoryAction(prevState: State, formData: FormData)
     }
 
     try {
-        const { data, error } = await insertCategory(validatedFields.data);
+        const {data , error } = await insertTag(validatedFields.data);
 
         if(error) {
             return {
                 message : error.message,
             }
         }
+
     } catch (error) {
+
         return {
             message: "Database Error.",
         };
     }
-    // revalidateTag('/dashboard/categories')
-    revalidatePath('/dashboard/categories');
-    redirect('/dashboard/categories');
+
+    revalidatePath('/dashboard/tags');
+    redirect('/dashboard/tags');
     
 }
 
-export async function updateCategoryAction(
+export async function updateTagAction(
     id : string, prevState: State, formData: FormData) {
-    const validatedFields = CategorySchema.safeParse({
+    const validatedFields = TagSchema.safeParse({
         name_en: formData.get('name_en'),
         name_mm: formData.get('name_mm'),
-        is_active : formData.get('is_active')
     });
 
     if (!validatedFields.success) {
-        
         return {
             errors: validatedFields.error.flatten().fieldErrors,
         };
     }
 
-    // const { name_en, name_mm } = validatedFields.data;
-
     try {
-        const { data , error } = await updateCategory(id, validatedFields.data);
-
-
+        const {data , error } = await updateTag(id, validatedFields.data);
+        
         if(error) {
             return {
                 message : error.message,
@@ -73,11 +70,11 @@ export async function updateCategoryAction(
         }
     } catch (error) {
         return {
-            message: "Database Error.",
+            message: error ?? null,
         };
     }
-    // revalidateTag('/dashboard/categories')
-    revalidatePath('/dashboard/categories');
-    redirect('/dashboard/categories');
+
+    revalidatePath('/dashboard/tags');
+    redirect('/dashboard/tags');
     
 }
