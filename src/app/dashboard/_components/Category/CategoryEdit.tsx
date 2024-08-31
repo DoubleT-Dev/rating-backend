@@ -9,10 +9,10 @@ import RadioBoxComponent from '@/components/ui/radiobox';
 import ErrorPopup from '@/components/ui/error-popup';
 
 export default function CategoryEdit({
-    category,
-  }: {
-    category: Category;
-  }) {
+  category,
+}: {
+  category: Category;
+}) {
   const initialState = { errors: {} };
   const updateCategoryID = updateCategoryAction.bind(null, category.id);
   const [state, dispatch] = useFormState(updateCategoryID, initialState);
@@ -20,13 +20,13 @@ export default function CategoryEdit({
   return (
     <form action={dispatch} >
       {state.message && <ErrorPopup message={state.message} />}
-      
+
       <div className="rounded-md bg-blue-50 p-4 md:p-6">
 
         {/* Category name (English) */}
         <div className="mb-4">
           <label htmlFor="name_en" className="mb-2 block text-sm font-medium">
-           Category Name ( English )
+            Category Name ( English )
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
@@ -41,14 +41,14 @@ export default function CategoryEdit({
               />
               {/* <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" /> */}
             </div>
-            <ValidateError id='name_en' message={state.errors?.name_en}/>
+            <ValidateError id='name_en' message={state.errors?.name_en} />
           </div>
         </div>
 
         {/* Category Name (Myanmar) */}
         <div className="mb-4">
           <label htmlFor="name_en" className="mb-2 block text-sm font-medium">
-           Category Name ( Myanmar )
+            Category Name ( Myanmar )
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
@@ -63,11 +63,11 @@ export default function CategoryEdit({
               />
               {/* <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" /> */}
             </div>
-            <ValidateError id='name_mm' message={state.errors?.name_mm}/>
+            <ValidateError id='name_mm' message={state.errors?.name_mm} />
           </div>
         </div>
 
-        <RadioBoxComponent status={category.is_active}/>
+        <RadioBoxComponent status={category.is_active} />
 
       </div>
       <div className="mt-6 flex justify-start gap-4">
@@ -78,7 +78,7 @@ export default function CategoryEdit({
         >
           Cancel
         </Link>
-        
+
       </div>
     </form>
   );

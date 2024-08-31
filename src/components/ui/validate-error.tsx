@@ -2,7 +2,7 @@ import React from 'react';
 
 interface RadioProps {
   id: string;
-  message: string[] | undefined;
+  message: any;
 }
 
 const ValidateError: React.FC<RadioProps> = ({

@@ -9,6 +9,7 @@ import { MagnifyingGlassIcon } from '@heroicons/react/16/solid';
 import RadioBoxComponent from '@/components/ui/radiobox';
 import ValidateError from '@/components/ui/validate-error';
 import { useState } from 'react';
+import ErrorPopup from '@/components/ui/error-popup';
 
 export default function BizEdit({
     biz,

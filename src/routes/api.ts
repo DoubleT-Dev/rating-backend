@@ -5,6 +5,30 @@ import { unstable_noStore as noStore, revalidatePath } from 'next/cache';
 
 const PAGE_SIZE = parseInt(process.env.PAGE_SIZE!);
 
+
+// export const insertBizWithAddress = async (bizData: {
+//   name_en: string;
+//   name_mm: string;
+//   categories_id: string;
+// }, 
+//   addressData : {
+//       biz_id: string;
+//       contact: string;
+//       address_1 : string;
+//       address_2 : boolean;
+//       city : string
+//       township : string
+//       region : string
+// }) => {
+//   const supabase = createClient()
+//   const { data, error } = await supabase.from('bizs').insert([bizData])
+//   .then(({ data: biz }) => {
+//     return supabase.from('addresses').insert([{ name: 'Supa City', country_id: biz[0].id }]);
+//   });;
+
+//   return { data, error };
+// };
+
 /** Biz Route **/
 // =====================================
 
@@ -60,7 +84,7 @@ export const insertBiz = async (bizData: {
   categories_id: string;
 }) => {
   const supabase = createClient()
-  const { data, error } = await supabase.from('bizs').insert([bizData]).select();
+  const { data, error } = await supabase.from('bizs').insert([bizData]).select('id').single();
 
   return { data, error };
 };
@@ -88,7 +112,7 @@ export const updateBiz = async (id: string, bizData: {
   categories_id?: string;
 }) => {
   const supabase = createClient()
-  const { data, error } = await supabase.from('bizs').update(bizData).eq('id', id).select();
+  const { data, error } = await supabase.from('bizs').update(bizData).eq('id', id).select('id').single();
   
   return { data, error };
 };
@@ -399,4 +423,33 @@ export const deleteTag = async (id: string) => {
     console.error('Error deleting Tag:');
   }
 
+};
+
+export const insertAddress = async (addressData : {
+      biz_id: string;
+      contact: string;
+      address_1 : string;
+      address_2 : string | null;
+      city : string | null;
+      township : string| null;
+      region : string| null;
+}) => {
+  const supabase = createClient()
+  const { data, error } = await supabase.from('addresses').insert([addressData]).select();
+  return {data , error };
+};
+
+
+export const updateAddress = async (id : string , addressData : {
+  biz_id: string;
+  contact: string;
+  address_1 : string;
+  address_2 : string | null;
+  city : string | null;
+  township : string| null;
+  region : string| null;
+}) => {
+const supabase = createClient()
+const { data, error } = await supabase.from('addresses').update([addressData]).eq('id', id).select();
+return {data , error };
 };
