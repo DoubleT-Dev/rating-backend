@@ -102,9 +102,7 @@ export default function BizEdit({
 
         {/* Description */}
         <div className="mb-4">
-          <label htmlFor="name_en" className="mb-2 block text-sm font-medium">
-           Description
-          </label>
+          <label htmlFor="name_en" className="mb-2 block text-sm font-medium">Description</label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
               <textarea id="description"
@@ -127,7 +125,7 @@ export default function BizEdit({
       <div className="mt-6 flex justify-start gap-4">
         <Button type="submit">Update</Button>
         <Link
-          href="/dashboard/categories"
+          href="/dashboard/bizs"
           className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
         >
           Cancel

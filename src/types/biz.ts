@@ -1,4 +1,5 @@
-import {Category} from '../types/category'
+import { Category } from './category'
+import { Address } from './address';
 
 export type Biz = {
     id: string;
@@ -7,6 +8,7 @@ export type Biz = {
     categories_id : string;
     is_active : boolean;
     description : string
-    // categories: Category
+    categories: Category
+    addresses: Address[]
   };
   

@@ -13,6 +13,7 @@ export default function Logo() {
         alt="bellolae"
         width={350}
         height={350}
+        priority
       />
     </div>
   );

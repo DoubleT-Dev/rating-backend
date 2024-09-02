@@ -91,18 +91,18 @@ export const insertBiz = async (bizData: {
 
 // Read a single business by ID
 export const fetchBizById = async (id: string) => {
-  const supabase = createClient()
-  const { data, error } = await supabase
-    .from('bizs')
-    .select('*')
-    .eq('id', id)
-    .single();
+    const supabase = createClient()
+    const { data, error } = await supabase
+        .from('bizs')
+        .select('*, categories(*), addresses(*)')
+        .eq('id', id)
+        .single();
 
-  if (error) {
-    throw new Error(error.message);
-  }
+    if (error) {
+      throw new Error(error.message);
+    }
 
-  return data;
+    return data;
 };
 
 // Update a business by ID
@@ -425,14 +425,30 @@ export const deleteTag = async (id: string) => {
 
 };
 
-export const insertAddress = async (addressData : {
-      biz_id: string;
-      contact: string;
-      address_1 : string;
-      address_2 : string | null;
-      city : string | null;
-      township : string| null;
-      region : string| null;
+export const fetchAddressById = async (id: string) => {
+    const supabase = createClient()
+    const { data, error } = await supabase
+        .from('addresses')
+        .select('*, bizs(*)')
+        .eq('id', id)
+        .single();
+
+    if (error) {
+      console.log(error);
+
+    }
+
+    return data;
+};
+
+export const insertAddress = async (addressData: {
+    biz_id: string | null;
+    contact: string;
+    address_1: string;
+    address_2: string | null;
+    city: string | null;
+    township: string | null;
+    region: string | null;
 }) => {
   const supabase = createClient()
   const { data, error } = await supabase.from('addresses').insert([addressData]).select();
@@ -441,7 +457,7 @@ export const insertAddress = async (addressData : {
 
 
 export const updateAddress = async (id : string , addressData : {
-  biz_id: string;
+  biz_id: string | null;
   contact: string;
   address_1 : string;
   address_2 : string | null;
@@ -452,4 +468,23 @@ export const updateAddress = async (id : string , addressData : {
 const supabase = createClient()
 const { data, error } = await supabase.from('addresses').update([addressData]).eq('id', id).select();
 return {data , error };
+};
+
+export const deleteAddress = async (id: string) => {
+  const supabase = createClient()
+
+  try {
+    const { data, error } = await supabase.from('addresses').delete().eq('id', id).select();
+
+    if (error) {
+      throw new Error('Failed to delete Address');
+    }
+
+    revalidatePath(`/dashboard/bizs/${data[0].biz_id}/detail`);
+    return { message: 'Deleted Address.' };
+
+  } catch (error) {
+    console.error('Error deleting Address:');
+  }
+
 };

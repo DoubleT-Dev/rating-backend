@@ -1,4 +1,4 @@
-import { DeleteBiz, UpdateButton } from '@/components/ui/action-button';
+import { DeleteBiz, DetailButton, UpdateButton } from '@/components/ui/action-button';
 import Status from '@/components/ui/status';
 import { fetchBizPagination } from '@/routes/api';
 
@@ -63,6 +63,8 @@ export default async function BizList({
                     <UpdateButton 
                         routeName={`/dashboard/bizs/${biz.id}/edit`}
                      />
+
+                    <DetailButton routeName={`/dashboard/bizs/${biz.id}/detail`} />
                     
                     <DeleteBiz id={biz.id}/>
                   </div>

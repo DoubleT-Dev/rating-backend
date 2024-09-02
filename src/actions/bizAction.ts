@@ -2,7 +2,7 @@
 import { redirect } from 'next/navigation';
 import { BizSchema } from '@/schemas/BizSchema';
 import { revalidatePath } from 'next/cache';
-import { insertAddress, insertBiz, updateBiz } from '@/routes/api';
+import { insertAddress, insertBiz, updateAddress, updateBiz } from '@/routes/api';
 import { AddressSchema } from '@/schemas/AddressSchema';
 import { BizAddressSchema } from '@/schemas/BizAddressSchema';
 
@@ -19,6 +19,19 @@ export type State = {
         // region?: string[];
         // is_active? : boolean[];
         // description? : string[];
+    };
+    message?: string | null | unknown;
+};
+
+export type AddressState = {
+    errors?: {
+        biz_id?: string[];
+        contact?: string[];
+        address_1?: string[];
+        address_2?: string[] | null;
+        city?: string[] | null;
+        township?: string[] | null;
+        region?: string[] | null;
     };
     message?: string | null | unknown;
 };
@@ -127,5 +140,87 @@ export async function updateBizAction(
     
     revalidatePath('/dashboard/bizs');
     redirect('/dashboard/bizs');
+    
+}
+
+export async function updateBizAddressAction(
+    id : string, prevState: AddressState, formData: FormData
+) {
+    const validatedFields = AddressSchema.safeParse({
+        biz_id: formData.get('biz_id'),
+        contact: formData.get('contact'),
+        address_1: formData.get('address_1'),
+        address_2: formData.get('address_2'),
+        city: formData.get('city'),
+        township: formData.get('township'),
+        region: formData.get('region'),
+    });
+
+    
+    if (!validatedFields.success) {
+        
+        return {
+            errors: validatedFields.error.flatten().fieldErrors,
+        };
+    }
+    
+    try {
+        const {data, error} = await updateAddress(id, validatedFields.data);
+        
+        console.log(data);
+        if(error) {
+            return {
+                message : error.message,
+            }
+        }
+    } catch (error) {
+        return {
+            message: "Database Error.",
+        };
+    }
+    let bizID = validatedFields.data.biz_id;
+    
+    revalidatePath(`/dashboard/bizs/${bizID}/detail`);
+    redirect(`/dashboard/bizs/${bizID}/detail`);
+    
+}
+
+
+export async function createBizAddressAction(prevState: AddressState, formData: FormData
+) {
+    const validatedFields = AddressSchema.safeParse({
+        biz_id: formData.get('biz_id'),
+        contact: formData.get('contact'),
+        address_1: formData.get('address_1'),
+        address_2: formData.get('address_2'),
+        city: formData.get('city'),
+        township: formData.get('township'),
+        region: formData.get('region'),
+    });
+
+    if (!validatedFields.success) {
+        
+        return {
+            errors: validatedFields.error.flatten().fieldErrors,
+        };
+    }
+    
+    try {
+        const {data, error} = await insertAddress(validatedFields.data);
+        
+        if(error) {
+            return {
+                message : error.message,
+            }
+        }
+    } catch (error) {
+        return {
+            message: "Database Error.",
+        };
+    }
+    let bizID = validatedFields.data.biz_id;
+    
+    revalidatePath(`/dashboard/bizs/${bizID}/detail`);
+    redirect(`/dashboard/bizs/${bizID}/detail`);
     
 }
