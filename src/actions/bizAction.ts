@@ -186,8 +186,7 @@ export async function updateBizAddressAction(
 }
 
 
-export async function createBizAddressAction(prevState: AddressState, formData: FormData
-) {
+export async function createBizAddressAction(prevState: AddressState, formData: FormData) {
     const validatedFields = AddressSchema.safeParse({
         biz_id: formData.get('biz_id'),
         contact: formData.get('contact'),

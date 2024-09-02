@@ -5,19 +5,16 @@ import { Button } from '@/components/ui/button';
 import { useFormState } from 'react-dom';
 import { createBizAction } from '@/actions/bizAction';
 import { Category } from '@/types/category';
-import CheckboxComponent from '@/components/ui/checkbox';
-import { stat } from 'fs';
 import RadioBoxComponent from '@/components/ui/radiobox';
 import ValidateError from '@/components/ui/validate-error';
 import ErrorPopup from '@/components/ui/error-popup';
-import { unknown } from 'zod';
 
 export default function BizCreate({
   categories
 }: {
   categories: Category[] | null
 }) {
-  const initialState = { errors: {} , message : undefined};
+  const initialState = { errors: {}, message: undefined };
   const [state, dispatch] = useFormState(createBizAction, initialState);
 
   return (
@@ -112,7 +109,7 @@ export default function BizCreate({
             </div>
           </div>
 
-        <RadioBoxComponent status={true} />
+          <RadioBoxComponent status={true} />
         </fieldset>
 
         <fieldset className="rounded-md bg-blue-50 p-4 md:p-6">
@@ -178,12 +175,69 @@ export default function BizCreate({
             </div>
           </div>
 
+          {/* City */}
+          <div className="mb-4">
+            <label htmlFor="city" className="mb-2 block text-sm font-medium">
+              City
+            </label>
+            <div className="relative mt-2 rounded-md">
+              <div className="relative">
+                <input
+                  id="city"
+                  name="city"
+                  type="text"
+                  placeholder="Enter Biz City"
+                  className="peer block w-full rounded-md border border-gray-200 py-2 pl-3 text-sm outline-2 placeholder:text-gray-500"
+                  aria-describedby="biz-error"
+                />
+              </div>
+              <ValidateError id='city' message={state?.errors?.city} />
+            </div>
+          </div>
+
+          {/* Township */}
+          <div className="mb-4">
+            <label htmlFor="township" className="mb-2 block text-sm font-medium">
+              Township
+            </label>
+            <div className="relative mt-2 rounded-md">
+              <div className="relative">
+                <input
+                  id="township"
+                  name="township"
+                  type="text"
+                  placeholder="Enter Township"
+                  className="peer block w-full rounded-md border border-gray-200 py-2 pl-3 text-sm outline-2 placeholder:text-gray-500"
+                  aria-describedby="biz-error"
+                />
+              </div>
+              <ValidateError id='township' message={state?.errors?.township} />
+            </div>
+          </div>
+
+          {/* Region */}
+          <div className="mb-4">
+            <label htmlFor="region" className="mb-2 block text-sm font-medium">
+              Region
+            </label>
+            <div className="relative mt-2 rounded-md">
+              <div className="relative">
+                <input
+                  id="region"
+                  name="region"
+                  type="text"
+                  placeholder="Enter Region"
+                  className="peer block w-full rounded-md border border-gray-200 py-2 pl-3 text-sm outline-2 placeholder:text-gray-500"
+                  aria-describedby="biz-error"
+                />
+              </div>
+              <ValidateError id='region' message={state?.errors?.region} />
+            </div>
+          </div>
+
         </fieldset>
 
       </div>
-
-
-
 
       <div className="mt-6 flex justify-start gap-4">
         <Button type="submit">Create</Button>

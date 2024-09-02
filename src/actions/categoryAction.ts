@@ -76,7 +76,7 @@ export async function updateCategoryAction(
             message: "Database Error.",
         };
     }
-    // revalidateTag('/dashboard/categories')
+
     revalidatePath('/dashboard/categories');
     redirect('/dashboard/categories');
     
