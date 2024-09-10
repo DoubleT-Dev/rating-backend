@@ -2,12 +2,13 @@
 import { redirect } from 'next/navigation';
 import { BizSchema } from '@/schemas/BizSchema';
 import { revalidatePath } from 'next/cache';
-import { insertAddress, insertBiz, updateAddress, updateBiz } from '@/routes/api';
+import { insertAddress, insertBiz, updateAddress, updateBiz, uploadImage } from '@/routes/api';
 import { AddressSchema } from '@/schemas/AddressSchema';
 import { BizAddressSchema } from '@/schemas/BizAddressSchema';
 
 export type State = {
     errors?: {
+        logo?: string[];
         name_en?: string[];
         name_mm?: string[];
         categories_id?: string[];
@@ -50,6 +51,7 @@ export async function createBizAction(prevState: State, formData: FormData) {
             city: formData.get('city'),
             township: formData.get('township'),
             region: formData.get('region'),
+            logo: formData.get('logo'),
         });
 
         if (!validatedFields.success) {
@@ -59,7 +61,16 @@ export async function createBizAction(prevState: State, formData: FormData) {
         }
 
         try {
+            const {data : imgResp , error : imgErr } = await uploadImage('biz-images', validatedFields.data.logo);        
+
+            if(imgErr) {
+                return {
+                    message : "Image Upload Error.",
+                }
+            }
+
             const bizData = {
+                logo: imgResp.path,
                 name_en: validatedFields.data.name_en,
                 name_mm: validatedFields.data.name_mm,
                 description: validatedFields.data.description,
@@ -94,6 +105,8 @@ export async function createBizAction(prevState: State, formData: FormData) {
                     message : addressErr.message,
                 }
             }
+
+            
 
         } catch (error) {
             return {

@@ -5,6 +5,7 @@ import { useFormState } from 'react-dom';
 import ValidateError from '@/components/ui/validate-error';
 import RadioBoxComponent from '@/components/ui/radiobox';
 import { createRatingCategoryAction } from '@/actions/ratingCategoryAction';
+import ErrorPopup from '@/components/ui/error-popup';
 
 export default function RatingCategoryCreate() {
   const initialState = { errors: {} };

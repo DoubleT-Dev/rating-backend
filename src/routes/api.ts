@@ -6,28 +6,30 @@ import { unstable_noStore as noStore, revalidatePath } from 'next/cache';
 const PAGE_SIZE = parseInt(process.env.PAGE_SIZE!);
 
 
-// export const insertBizWithAddress = async (bizData: {
-//   name_en: string;
-//   name_mm: string;
-//   categories_id: string;
-// }, 
-//   addressData : {
-//       biz_id: string;
-//       contact: string;
-//       address_1 : string;
-//       address_2 : boolean;
-//       city : string
-//       township : string
-//       region : string
-// }) => {
-//   const supabase = createClient()
-//   const { data, error } = await supabase.from('bizs').insert([bizData])
-//   .then(({ data: biz }) => {
-//     return supabase.from('addresses').insert([{ name: 'Supa City', country_id: biz[0].id }]);
-//   });;
 
-//   return { data, error };
-// };
+export const getImageUrl = (filename : string) => {
+  const supabase = createClient()
+  const { data } = supabase.storage.from('rating-bucket').getPublicUrl(filename)
+
+  return data.publicUrl;
+};
+
+
+export const uploadImage = async (filename : string, file : File) => {
+  const supabase = createClient()
+  console.log(file);
+  const { data, error } = await supabase.storage
+              .from('rating-bucket')
+              .upload(`${filename}/${Date.now()}_${file.name}`, file);
+
+  if (error) {
+    throw error;
+  }
+
+  return { data , error };
+};
+
+
 
 /** Biz Route **/
 // =====================================
@@ -155,6 +157,56 @@ export const deleteEntity = async (entityType: string, id: string) => {
     throw error;
   }
 };
+
+
+// =====================================
+
+  /** Biz Image Route **/
+
+// =====================================
+
+export const fetchBizImages = async (id : any) => {
+    noStore();
+
+    const supabase = createClient()
+    console.log(id);
+    const { data, error } = await supabase.from('bizs').select('*, biz_images(*)').eq('id', id).single()
+
+    if (error) { return error.message }
+
+    return data;
+};
+
+export const insertBizImage = async (bizImageData: {
+  biz_id: string;
+  image_id: string;
+  image_path: string;
+  full_path: string;
+}) => {
+  const supabase = createClient()
+  const { data, error } = await supabase.from('biz_images').insert([bizImageData]).select();
+
+  return { data, error };
+};
+
+export const deleteBizImage = async (id: string) => {
+  const supabase = createClient()
+
+  try {
+    const { data, error } = await supabase.from('biz_images').delete().eq('id', id).select();
+
+    if (error) {
+      throw new Error('Failed to delete Biz');
+    }
+    
+    revalidatePath('/biz','layout');
+  } catch (error) {
+    console.error('Error deleting Biz:');
+  }
+
+};
+
+
 
 
 // =====================================

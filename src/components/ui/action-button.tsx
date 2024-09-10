@@ -1,8 +1,8 @@
 'use client'
-import { EyeIcon, PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { EyeIcon, PencilIcon, PlusIcon, TrashIcon, PhotoIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import React, { useState } from 'react';
-import { deleteAddress, deleteBiz, deleteCategory, deleteEntity, deleteRatingCategory, deleteTag } from '@/routes/api';
+import { deleteAddress, deleteBiz, deleteBizImage, deleteCategory, deleteEntity, deleteRatingCategory, deleteTag } from '@/routes/api';
 import clsx from 'clsx';
 import Modal from './modal';
 
@@ -31,6 +31,20 @@ return (
       className="rounded-md border p-2 hover:bg-gray-100"
     >
       <PencilIcon className="w-5" />
+    </Link>
+);
+}
+
+export function CustomButton(
+  {routeName } : 
+  { routeName : string}
+) {
+return (
+  <Link
+      href={routeName}
+      className="rounded-md border p-2 bg-green-200 hover:bg-gray-100"
+    >
+      <PhotoIcon className="w-5" />
     </Link>
 );
 }
@@ -216,6 +230,44 @@ export function DeleteAddress({ id }: { id: string }) {
 
   const handleConfirmDelete = () => {
     deleteAddress(id); // Call your delete function here
+    setIsModalOpen(false);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  return (
+    <>
+      <form onSubmit={handleDeleteClick}>
+        <button className="rounded-md border p-2 bg-red-500 hover:bg-red-700">
+          <span className="sr-only">Delete</span>
+          <TrashIcon className="w-4 text-white" />
+        </button>
+      </form>
+
+      <Modal
+      isOpen={isModalOpen}
+      onClose={handleCloseModal}
+      onConfirm={handleConfirmDelete}
+      title="Confirm Deletion"
+      message="Are you sure you want to delete this item?"
+      />
+    </>
+  );
+}
+
+export function DeleteBizImage({ id }: { id: string }) {
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleDeleteClick = (event: React.FormEvent) => {
+      event.preventDefault();
+      setIsModalOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    deleteBizImage(id); // Call your delete function here
     setIsModalOpen(false);
   };
 
