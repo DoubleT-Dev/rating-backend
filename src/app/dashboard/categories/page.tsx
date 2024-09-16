@@ -37,8 +37,7 @@ export default async function Page({
         />
       </div>
         <Suspense key={query + currentPage} fallback={<CategoriesTableSkeleton />}>
-        <CategoryList 
-            categories={data} 
+        <CategoryList categories={data} 
             // totalPages={totalPages} 
             // query={query} 
             // currentPage={currentPage} 

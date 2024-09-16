@@ -2,9 +2,10 @@
 import { redirect } from 'next/navigation';
 import { BizSchema } from '@/schemas/BizSchema';
 import { revalidatePath } from 'next/cache';
-import { insertAddress, insertBiz, updateAddress, updateBiz, uploadImage } from '@/routes/api';
+import { insertAddress, insertBiz, updateAddress, updateBiz } from '@/routes/api';
 import { AddressSchema } from '@/schemas/AddressSchema';
 import { BizAddressSchema } from '@/schemas/BizAddressSchema';
+import { uploadImage } from '@/app/lib/utils';
 
 export type State = {
     errors?: {
@@ -63,7 +64,7 @@ export async function createBizAction(prevState: State, formData: FormData) {
         try {
             const {data : imgResp , error : imgErr } = await uploadImage('biz-images', validatedFields.data.logo);        
 
-            if(imgErr) {
+            if(imgErr || !imgResp) {
                 return {
                     message : "Image Upload Error.",
                 }
@@ -128,6 +129,7 @@ export async function updateBizAction(
         categories_id: formData.get('categories_id'),
         is_active: formData.get('is_active'),
         description: formData.get('description'),
+        logo: formData.get('logo'),
     });
 
     if (!validatedFields.success) {
@@ -138,7 +140,24 @@ export async function updateBizAction(
     }
 
     try {
-        const {data, error} = await updateBiz(id, validatedFields.data);
+        const {data : imgResp , error : imgErr } = await uploadImage('biz-images', validatedFields.data.logo);        
+
+        if(imgErr || !imgResp) {
+            return {
+                message : "Image Upload Error.",
+            }
+        }
+
+        const bizData = {
+            logo: imgResp.path,
+            name_en: validatedFields.data.name_en,
+            name_mm: validatedFields.data.name_mm,
+            description: validatedFields.data.description,
+            categories_id: validatedFields.data.categories_id,
+        };
+
+
+        const {data, error} = await updateBiz(id, bizData);
 
         if(error) {
             return {

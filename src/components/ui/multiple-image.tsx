@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import { toast } from 'react-hot-toast';
 import { PlusCircleIcon, PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import { fetchBizImages, insertBizImage, uploadImage } from '@/routes/api';
+import { fetchBizImages, insertBizImage } from '@/routes/api';
+import { uploadImage } from '@/app/lib/utils';
 
 // Modal Component
 const Modal = ({ isOpen, onClose, onUpload } :any) => {
@@ -50,13 +51,19 @@ const ImageUploadWithModal = (biz :any) => {
         try {
 
             const uploadPromises = images.map(async (image) => {
+                
+                const {data, error } = await uploadImage('images', image);
 
-                const { data, error } = await supabase.storage
-                    .from('rating-bucket')
-                    .upload(`images/${Date.now()}_${image.name}`, image);
+                // const { data, error } = await supabase.storage
+                //     .from('rating-bucket')
+                //     .upload(`images/${Date.now()}_${image.name}`, image);
 
                 if (error) {
                     throw error;
+                }
+
+                if(!data){
+                    return { message : "Error" };
                 }
 
                 const bizImageData = {

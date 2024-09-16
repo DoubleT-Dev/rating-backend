@@ -8,6 +8,7 @@ export const BizSchema = z.object({
   name_mm: z.string().nonempty({ message: "Myanmar name is required" }),
   is_active : z.string().nullable(),
   description: z.string().nullable(),
+  logo: z.instanceof(File)
 });
 
 export type BizSchemaType = z.infer<typeof BizSchema>;

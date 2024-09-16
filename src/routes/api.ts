@@ -5,29 +5,12 @@ import { unstable_noStore as noStore, revalidatePath } from 'next/cache';
 
 const PAGE_SIZE = parseInt(process.env.PAGE_SIZE!);
 
+// export const getImageUrl = (filename : string) => {
+//   const supabase = createClient()
+//   const { data } = supabase.storage.from('rating-bucket').getPublicUrl(filename)
 
-
-export const getImageUrl = (filename : string) => {
-  const supabase = createClient()
-  const { data } = supabase.storage.from('rating-bucket').getPublicUrl(filename)
-
-  return data.publicUrl;
-};
-
-
-export const uploadImage = async (filename : string, file : File) => {
-  const supabase = createClient()
-  console.log(file);
-  const { data, error } = await supabase.storage
-              .from('rating-bucket')
-              .upload(`${filename}/${Date.now()}_${file.name}`, file);
-
-  if (error) {
-    throw error;
-  }
-
-  return { data , error };
-};
+//   return data.publicUrl;
+// };
 
 
 
@@ -71,7 +54,7 @@ export const fetchBizPagination = async (
     const { from, to } = calculatePagination(page);
     const supabase = createClient()
     const { data, error, count } = await supabase.from('bizs')
-            .select('id, name_en, name_mm, categories_id, is_active, categories (name_en)', { count: 'exact' }).ilike('name_en', `%${query}%`) // Ensure to get the exact count
+            .select('id, name_en, name_mm, logo, categories_id, is_active, categories (name_en)', { count: 'exact' }).ilike('name_en', `%${query}%`) // Ensure to get the exact count
             .range(from, to);
 
     if (error) { throw new Error(error.message); }
@@ -186,6 +169,33 @@ export const insertBizImage = async (bizImageData: {
   const supabase = createClient()
   const { data, error } = await supabase.from('biz_images').insert([bizImageData]).select();
 
+  return { data, error };
+};
+
+export const fetchBizImageId = async (id :string ) => {
+  const supabase = createClient()
+    const { data, error } = await supabase
+        .from('biz_images')
+        .select('*')
+        .eq('id', id)
+        .single();
+console.log(data);
+    if (error) {
+        // console.log(error)
+    }
+
+    return data;
+};
+
+export const updateBizImage = async (id: string, bizImageData: {
+  biz_id: string;
+  image_id: string;
+  image_path: string;
+  full_path: string;
+}) => {
+  const supabase = createClient()
+  const { data, error } = await supabase.from('biz_images').update(bizImageData).eq('id', id).single();
+  
   return { data, error };
 };
 

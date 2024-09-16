@@ -34,6 +34,25 @@ export default function BizEdit({
       
       <div className="rounded-md bg-blue-50 p-4 md:p-6">
 
+      <div className="mb-4">
+            <label htmlFor="logo" className="mb-2 block text-sm font-medium">
+              Biz Logo
+            </label>
+            <div className="relative mt-2 rounded-md">
+              <div className="relative">
+                <input
+                  id="logo"
+                  name="logo"
+                  type="file"
+                  className="peer block w-full rounded-md border border-gray-200 py-2 pl-3 text-sm outline-2 placeholder:text-gray-500"
+                  aria-describedby="biz-error"
+                />
+              </div>
+              <ValidateError id='logo' message={state?.errors?.logo} />
+            </div>
+          </div>
+          
+
         <div className="mb-4">
             <label className="mb-2 block text-sm font-medium">Category</label>
             <div className="relative z-20 bg-transparent dark:bg-form-input">

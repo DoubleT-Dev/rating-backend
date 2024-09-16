@@ -1,17 +1,19 @@
-import { DeleteBizImage } from '@/components/ui/action-button';
+import { DeleteBizImage, UpdateButton } from '@/components/ui/action-button';
 import { fetchBizImages } from '@/routes/api';
 import { createClient } from '@/utils/supabase/server';
 import Image from 'next/image';
+import BizImageEdit from './BizImageEdit';
+
+const getImageUrl = (filename: string) => {
+    const supabase = createClient()
+    const { data } = supabase.storage.from('rating-bucket').getPublicUrl(filename)
+
+    return data.publicUrl;
+};
 
 export default async function BizImageList(id: any) {
     const data = await fetchBizImages(id.id);
 
-    const getImageUrl = (filename: string) => {
-        const supabase = createClient()
-        const { data } = supabase.storage.from('rating-bucket').getPublicUrl(filename)
-
-        return data.publicUrl;
-    };
 
     return (
         <div className="mt-6 flow-root">
@@ -61,7 +63,8 @@ export default async function BizImageList(id: any) {
                                     {/* Hide on smaller screens using hidden sm:table-cell */}
                                     <td className="whitespace-nowrap py-3 pl-6 pr-3 hidden sm:table-cell">
                                         <div className="flex justify-end gap-3">
-                                            {/* Update and delete buttons will show on larger screens */}
+                                            <BizImageEdit bizImage={biz_images} />
+                                        
                                             <DeleteBizImage id={biz_images.id} />
                                         </div>
                                     </td>
