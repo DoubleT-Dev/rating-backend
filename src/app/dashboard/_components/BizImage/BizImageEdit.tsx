@@ -2,8 +2,8 @@
 import React, { useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import { toast } from 'react-hot-toast';
-import { PencilIcon, PlusCircleIcon, PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import { fetchBizImageId, fetchBizImages, insertBizImage, updateBizImage } from '@/routes/api';
+import { PencilIcon, PlusCircleIcon } from '@heroicons/react/24/outline';
+import {  updateBizImage } from '@/routes/api';
 import { uploadImage } from '@/app/lib/utils';
 
 const getImageUrl = (filename: string) => {
@@ -109,7 +109,7 @@ const BizImageEdit = ( {bizImage}: any) => {
                                 <PlusCircleIcon className="plus-icon" />
                             </label>
                         </div>
-                        <div className="preview-container-edit">
+                        <div className="preview-container">
                                 <div  className="preview-edit">
                                     <img src={previews} alt="preview" />
                                 </div>

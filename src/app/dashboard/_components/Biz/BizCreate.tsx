@@ -8,14 +8,21 @@ import { Category } from '@/types/category';
 import RadioBoxComponent from '@/components/ui/radiobox';
 import ValidateError from '@/components/ui/validate-error';
 import ErrorPopup from '@/components/ui/error-popup';
+import { useState } from 'react';
 
 export default function BizCreate({
   categories
 }: {
   categories: Category[] | null
 }) {
+  const [previews, setPreviews] = useState<string>("/no-image.png");
   const initialState = { errors: {}, message: undefined };
   const [state, dispatch] = useFormState(createBizAction, initialState);
+
+  const handleImageChange = (event: any) => {
+    const files = event.target.files[0];
+    setPreviews(URL.createObjectURL(files));
+  };
 
   return (
     <form action={dispatch} >
@@ -31,11 +38,19 @@ export default function BizCreate({
               Biz Logo
             </label>
             <div className="relative mt-2 rounded-md">
+
               <div className="relative">
+
+                <div className="preview-edit">
+                  <img src={previews} alt="preview" style={{ width: '150px' }} />
+                </div>
+
                 <input
                   id="logo"
                   name="logo"
                   type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
                   className="peer block w-full rounded-md border border-gray-200 py-2 pl-3 text-sm outline-2 placeholder:text-gray-500"
                   aria-describedby="biz-error"
                 />

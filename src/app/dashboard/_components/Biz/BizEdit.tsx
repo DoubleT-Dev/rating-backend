@@ -10,77 +10,100 @@ import RadioBoxComponent from '@/components/ui/radiobox';
 import ValidateError from '@/components/ui/validate-error';
 import { useState } from 'react';
 import ErrorPopup from '@/components/ui/error-popup';
+import { createClient } from '@/utils/supabase/client';
+
+const getImageUrl = (filename: string) => {
+  const supabase = createClient()
+  const { data } = supabase.storage.from('rating-bucket').getPublicUrl(filename)
+
+  return data.publicUrl;
+};
 
 export default function BizEdit({
-    biz,
-    categories
-  }: {
-    biz: Biz;
-    categories: Category[] | null;
-  }) {
+  biz,
+  categories
+}: {
+  biz: Biz;
+  categories: Category[] | null;
+}) {
   const initialState = { errors: {} };
+  const [previews, setPreviews] = useState<string>(getImageUrl(biz.logo));
+
   const updateBizID = updateBizAction.bind(null, biz.id);
   const [state, dispatch] = useFormState(updateBizID, initialState);
   const [textareaValue, setTextareaValue] = useState(biz.description); // State to store textarea value
 
   // Function to handle input change
-  const handleInputChange = (event : any) => {
+  const handleInputChange = (event: any) => {
     setTextareaValue(event.target.value); // Update state with the new value
   };
-  
+
+  const handleImageChange = (event: any) => {
+    const files = event.target.files[0];
+    setPreviews(URL.createObjectURL(files));
+  };
+
+
   return (
     <form action={dispatch} >
       {state.message && <ErrorPopup message={state.message} />}
-      
+
       <div className="rounded-md bg-blue-50 p-4 md:p-6">
 
-      <div className="mb-4">
-            <label htmlFor="logo" className="mb-2 block text-sm font-medium">
-              Biz Logo
-            </label>
-            <div className="relative mt-2 rounded-md">
-              <div className="relative">
-                <input
-                  id="logo"
-                  name="logo"
-                  type="file"
-                  className="peer block w-full rounded-md border border-gray-200 py-2 pl-3 text-sm outline-2 placeholder:text-gray-500"
-                  aria-describedby="biz-error"
-                />
+        <div className="mb-4">
+          <label htmlFor="logo" className="mb-2 block text-sm font-medium">
+            Biz Logo
+          </label>
+          <div className="relative mt-2 rounded-md">
+            <div className="relative">
+
+              <div className="preview-edit">
+                <img src={previews} alt="preview" style={{ width: '150px' }} />
               </div>
-              <ValidateError id='logo' message={state?.errors?.logo} />
+
+              <input
+                id="logo"
+                name="logo"
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="peer block w-full rounded-md border border-gray-200 py-2 pl-3 text-sm outline-2 placeholder:text-gray-500"
+                aria-describedby="biz-error"
+              />
             </div>
+            <ValidateError id='logo' message={state?.errors?.logo} />
           </div>
-          
+        </div>
+
 
         <div className="mb-4">
-            <label className="mb-2 block text-sm font-medium">Category</label>
-            <div className="relative z-20 bg-transparent dark:bg-form-input">
-                <select
-                    id="categories_id"
-                    name="categories_id"
-                    className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-                    defaultValue={biz.categories_id}
-                    aria-describedby="categories-id-error"
-                >
-                <option value="" disabled>
-                    Select a category
+          <label className="mb-2 block text-sm font-medium">Category</label>
+          <div className="relative z-20 bg-transparent dark:bg-form-input">
+            <select
+              id="categories_id"
+              name="categories_id"
+              className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+              defaultValue={biz.categories_id}
+              aria-describedby="categories-id-error"
+            >
+              <option value="" disabled>
+                Select a category
+              </option>
+              {categories?.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name_en}
                 </option>
-                {categories?.map((category) => (
-                    <option key={category.id} value={category.id}>
-                    {category.name_en}
-                    </option>
-                ))}
-                </select>
-                <MagnifyingGlassIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
-            </div>
-            <ValidateError id='categories_id' message={state.errors?.categories_id}/>
+              ))}
+            </select>
+            <MagnifyingGlassIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+          </div>
+          <ValidateError id='categories_id' message={state.errors?.categories_id} />
         </div>
 
         {/* Biz name (English) */}
         <div className="mb-4">
           <label htmlFor="name_en" className="mb-2 block text-sm font-medium">
-           Biz Name ( English )
+            Biz Name ( English )
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
@@ -94,14 +117,14 @@ export default function BizEdit({
                 aria-describedby="name-en-error"
               />
             </div>
-            <ValidateError id='name_en' message={state.errors?.name_en}/>
+            <ValidateError id='name_en' message={state.errors?.name_en} />
           </div>
         </div>
 
         {/* Biz Name (Myanmar) */}
         <div className="mb-4">
           <label htmlFor="name_en" className="mb-2 block text-sm font-medium">
-           Biz Name ( Myanmar )
+            Biz Name ( Myanmar )
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
@@ -115,7 +138,7 @@ export default function BizEdit({
                 aria-describedby="name-mm-error"
               />
             </div>
-            <ValidateError id='name_mm' message={state.errors?.name_mm}/>
+            <ValidateError id='name_mm' message={state.errors?.name_mm} />
           </div>
         </div>
 
@@ -134,11 +157,11 @@ export default function BizEdit({
                 aria-describedby="biz-error" />
 
             </div>
-            <ValidateError id='description' message={state.errors?.description}/>
+            <ValidateError id='description' message={state.errors?.description} />
           </div>
         </div>
 
-        <RadioBoxComponent status={biz.is_active}/>
+        <RadioBoxComponent status={biz.is_active} />
 
       </div>
       <div className="mt-6 flex justify-start gap-4">
@@ -149,7 +172,7 @@ export default function BizEdit({
         >
           Cancel
         </Link>
-        
+
       </div>
     </form>
   );
