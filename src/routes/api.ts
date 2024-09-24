@@ -95,6 +95,7 @@ export const updateBiz = async (id: string, bizData: {
   name_en?: string;
   name_mm?: string;
   categories_id?: string;
+  logo?: string | File;
 }) => {
   const supabase = createClient()
   const { data, error } = await supabase.from('bizs').update(bizData).eq('id', id).select('id').single();
@@ -487,6 +488,111 @@ export const deleteTag = async (id: string) => {
 
 };
 
+
+// =====================================
+
+  /** Editor Route **/
+
+// =====================================
+
+export const fetchEditorCount = async (
+  page : number, query : string
+  ) => {
+    noStore();
+    // await new Promise((resolve) => setTimeout(resolve, 3000));
+    const { from, to } = calculatePagination(page);
+    const supabase = createClient()
+    const { count } = await supabase.from('editor_picks')
+            .select('*', { count: 'exact', head : true }).ilike('title', `%${query}%`);
+
+    const totalPages = Math.ceil((count || 0) / PAGE_SIZE);
+
+    return totalPages ;
+};
+
+export const fetchEditorPagination = async (
+  page : number, query : string
+  ) => {
+    noStore();
+    // await new Promise((resolve) => setTimeout(resolve, 3000));
+    const { from, to } = calculatePagination(page);
+    
+    const supabase = createClient()
+    const { data, error } = await supabase.from('editor_picks')
+            .select('*, bizs(name_en)', { count: 'exact' }).ilike('title', `%${query}%`) // Ensure to get the exact count
+            .range(from, to);
+
+    if (error) { console.log(error.message); throw new Error(error.message);  }
+
+    return data ?? [];
+};
+
+export const fetchEditorById = async (id: string) => {
+    const supabase = createClient()
+    const { data, error } = await supabase
+        .from('editor_picks')
+        .select('*, bizs(*)')
+        .eq('id', id)
+        .single();
+
+    if (error) {
+      console.log(error);
+
+    }
+
+    return data;
+};
+
+export const insertEditor = async (editorData: {
+    biz_id: string | null;
+    slide_image: string | null;
+    title: string;
+    description: string;
+
+}) => {
+  const supabase = createClient()
+  const { data, error } = await supabase.from('editor_picks').insert([editorData]).select();
+  return {data , error };
+};
+
+
+export const updateEditor = async (id : string , editorData : {
+  biz_id: string | null;
+  slide_image: string | File;
+  title: string;
+  description: string;
+}) => {
+const supabase = createClient()
+const { data, error } = await supabase.from('editor_picks').update([editorData]).eq('id', id).select();
+return {data , error };
+};
+
+export const deleteEditor = async (id: string) => {
+  const supabase = createClient()
+
+  try {
+    const { data, error } = await supabase.from('addresses').delete().eq('id', id).select();
+
+    if (error) {
+      throw new Error('Failed to delete Address');
+    }
+
+    revalidatePath(`/dashboard/bizs/${data[0].biz_id}/detail`);
+    return { message: 'Deleted Address.' };
+
+  } catch (error) {
+    console.error('Error deleting Address:');
+  }
+
+};
+
+
+// =====================================
+
+  /** Address Route **/
+
+// =====================================
+
 export const fetchAddressById = async (id: string) => {
     const supabase = createClient()
     const { data, error } = await supabase
@@ -550,3 +656,4 @@ export const deleteAddress = async (id: string) => {
   }
 
 };
+

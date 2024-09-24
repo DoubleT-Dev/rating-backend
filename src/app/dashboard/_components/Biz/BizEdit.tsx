@@ -10,14 +10,6 @@ import RadioBoxComponent from '@/components/ui/radiobox';
 import ValidateError from '@/components/ui/validate-error';
 import { useState } from 'react';
 import ErrorPopup from '@/components/ui/error-popup';
-import { createClient } from '@/utils/supabase/client';
-
-const getImageUrl = (filename: string) => {
-  const supabase = createClient()
-  const { data } = supabase.storage.from('rating-bucket').getPublicUrl(filename)
-
-  return data.publicUrl;
-};
 
 export default function BizEdit({
   biz,
@@ -27,25 +19,49 @@ export default function BizEdit({
   categories: Category[] | null;
 }) {
   const initialState = { errors: {} };
-  const [previews, setPreviews] = useState<string>(getImageUrl(biz.logo));
+  const [previews, setPreviews] = useState<string>(biz.logo);
 
   const updateBizID = updateBizAction.bind(null, biz.id);
   const [state, dispatch] = useFormState(updateBizID, initialState);
-  const [textareaValue, setTextareaValue] = useState(biz.description); // State to store textarea value
+  const [textareaValue, setTextareaValue] = useState(biz.description);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
-  // Function to handle input change
+
+  // Handle textarea input change
   const handleInputChange = (event: any) => {
     setTextareaValue(event.target.value); // Update state with the new value
   };
 
+  // Handle image input change
   const handleImageChange = (event: any) => {
-    const files = event.target.files[0];
-    setPreviews(URL.createObjectURL(files));
+    const file = event.target.files[0];
+    if (file) {
+      setSelectedImage(file); // Store the selected image file
+      setPreviews(URL.createObjectURL(file)); // Update the preview with the new image
+    }
   };
 
+  const handleSubmit = async (event: any) => {
+    event.preventDefault();
+    const formData = new FormData();
+
+    if (selectedImage) {
+      formData.append('logo', selectedImage);
+    } else {
+      formData.append('logo', biz.logo);
+    }
+
+    formData.append('name_en', event.target.name_en.value);
+    formData.append('name_mm', event.target.name_mm.value);
+    formData.append('categories_id', event.target.categories_id.value);
+    formData.append('description', textareaValue);
+    formData.append('is_active', event.target.is_active.value);
+
+    dispatch(formData);
+  };
 
   return (
-    <form action={dispatch} >
+    <form onSubmit={handleSubmit} >
       {state.message && <ErrorPopup message={state.message} />}
 
       <div className="rounded-md bg-blue-50 p-4 md:p-6">

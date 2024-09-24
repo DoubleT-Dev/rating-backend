@@ -1,16 +1,17 @@
-import { CustomButton, DeleteBiz, DetailButton, UpdateButton } from '@/components/ui/action-button';
+import { DeleteBiz, DetailButton, UpdateButton } from '@/components/ui/action-button';
 import Status from '@/components/ui/status';
-import { fetchBizPagination } from '@/routes/api';
+import { fetchEditorPagination } from '@/routes/api';
 import Image from 'next/image'
+import { createClient } from '@/utils/supabase/server';
 
-export default async function BizList({
+export default async function EditorList({
   query,
   currentPage,
 }: {
   query: string;
   currentPage: number;
 }) {
-  const data = await fetchBizPagination(currentPage, query);
+  const data = await fetchEditorPagination(currentPage, query);
 
   return (
     <div className="mt-6 flow-root">
@@ -21,16 +22,15 @@ export default async function BizList({
             <thead className="rounded-lg text-left text-sm font-normal">
               <tr>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  Logo
+                    Image
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  Category Name
+                    Title
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  Biz Name (English)
+                    Biz
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  Biz Name (Myanmar)
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
                   Status
@@ -42,47 +42,42 @@ export default async function BizList({
               </tr>
             </thead>
             <tbody className="bg-white">
-              {data.map((biz: any) => (
+              {data.map((editor: any) => (
                 <tr
-                  key={biz.id}
+                  key={editor.id}
                   className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
                 >
                   <td className="whitespace-nowrap px-3 py-3">
                     {
                       <Image
-                          src={biz.logo ? biz.logo : '/no-image.png'}
+                          src={editor.slide_image}
                           width={100}
                           height={100}
-                          alt={biz.name_en}
+                          alt={editor.name_en}
                           priority
                       />
                     }
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
-                    {biz.categories.name_en}
+                    {editor.title}
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
-                    {biz.name_en}
+                    {editor.bizs.name_en}
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
-                    {biz.name_mm}
-                  </td>
-                  <td className="whitespace-nowrap px-3 py-3">
-                    <Status status={biz.is_active} />
+                    <Status status={editor.is_active} />
                   </td>
                   {/* Hide on smaller screens using hidden sm:table-cell */}
                   <td className="whitespace-nowrap py-3 pl-6 pr-3 hidden sm:table-cell">
                     <div className="flex justify-end gap-3">
                       {/* Update and delete buttons will show on larger screens */}
                       <UpdateButton
-                        routeName={`/dashboard/bizs/${biz.id}/edit`}
+                        routeName={`/dashboard/editors/${editor.id}/edit`}
                       />
 
-                      <DetailButton routeName={`/dashboard/bizs/${biz.id}/detail`} />
+                      <DetailButton routeName={`/dashboard/editors/${editor.id}/detail`} />
 
-                      <CustomButton routeName={`/dashboard/bizs/${biz.id}/images`} />
-
-                      <DeleteBiz id={biz.id} />
+                      <DeleteBiz id={editor.id} />
                     </div>
                   </td>
                 </tr>

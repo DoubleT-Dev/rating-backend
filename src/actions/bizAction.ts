@@ -6,6 +6,14 @@ import { insertAddress, insertBiz, updateAddress, updateBiz } from '@/routes/api
 import { AddressSchema } from '@/schemas/AddressSchema';
 import { BizAddressSchema } from '@/schemas/BizAddressSchema';
 import { uploadImage } from '@/app/lib/utils';
+import { createClient } from '@/utils/supabase/server';
+
+const getImageUrl = (filename: string) => {
+    const supabase = createClient()
+    const { data } = supabase.storage.from('rating-bucket').getPublicUrl(filename)
+    
+    return data.publicUrl;
+};
 
 export type State = {
     errors?: {
@@ -139,23 +147,34 @@ export async function updateBizAction(
         };
     }
 
-    try {
-        const {data : imgResp , error : imgErr } = await uploadImage('biz-images', validatedFields.data.logo);        
+    let image_link: string | File = "/no-image.png";
 
-        if(imgErr || !imgResp) {
-            return {
-                message : "Image Upload Error.",
+    try {
+
+        if (typeof validatedFields.data.logo === 'string') {
+            image_link = validatedFields.data.logo == 'null' ? "/no-image.png" : validatedFields.data.logo;
+        } else if (validatedFields.data.logo instanceof File) {
+            if (validatedFields.data.logo.size > 0) {
+                const {data : imgResp , error : imgErr } = await uploadImage('biz-images', validatedFields.data.logo);        
+
+                if (imgErr || !imgResp) {
+                    return {
+                        message: "Image Upload Error.",
+                    };
+                }
+                image_link = getImageUrl(imgResp.path);
+            } else {
+                image_link = validatedFields.data.logo;
             }
         }
 
         const bizData = {
-            logo: imgResp.path,
+            logo: image_link,
             name_en: validatedFields.data.name_en,
             name_mm: validatedFields.data.name_mm,
             description: validatedFields.data.description,
             categories_id: validatedFields.data.categories_id,
         };
-
 
         const {data, error} = await updateBiz(id, bizData);
 
