@@ -1,7 +1,7 @@
-import { CustomButton, DeleteBiz, DetailButton, UpdateButton } from '@/components/ui/action-button';
 import Status from '@/components/ui/status';
 import { fetchBizPagination } from '@/routes/api';
 import Image from 'next/image'
+import BizActionDropdown from './BizActionList';
 
 export default async function BizList({
   query,
@@ -72,18 +72,7 @@ export default async function BizList({
                   </td>
                   {/* Hide on smaller screens using hidden sm:table-cell */}
                   <td className="whitespace-nowrap py-3 pl-6 pr-3 hidden sm:table-cell">
-                    <div className="flex justify-end gap-3">
-                      {/* Update and delete buttons will show on larger screens */}
-                      <UpdateButton
-                        routeName={`/dashboard/bizs/${biz.id}/edit`}
-                      />
-
-                      <DetailButton routeName={`/dashboard/bizs/${biz.id}/detail`} />
-
-                      <CustomButton routeName={`/dashboard/bizs/${biz.id}/images`} />
-
-                      <DeleteBiz id={biz.id} />
-                    </div>
+                      <BizActionDropdown bizId={biz.id} />
                   </td>
                 </tr>
               ))}

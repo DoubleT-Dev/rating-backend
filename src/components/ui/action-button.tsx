@@ -1,14 +1,14 @@
 'use client'
-import { EyeIcon, PencilIcon, PlusIcon, TrashIcon, PhotoIcon } from '@heroicons/react/24/outline';
+import { EyeIcon, PencilIcon, PlusIcon, TrashIcon, PhotoIcon, ChatBubbleBottomCenterTextIcon } from '@heroicons/react/24/solid';
 import Link from 'next/link';
 import React, { useState } from 'react';
-import { deleteAddress, deleteBiz, deleteBizImage, deleteCategory, deleteEntity, deleteRatingCategory, deleteTag } from '@/routes/api';
+import { deleteAddress, deleteBiz, deleteBizImage, deleteCategory, deleteRatingCategory, deleteTag } from '@/routes/api';
 import clsx from 'clsx';
 import Modal from './modal';
 
 export function CreateButton(
-    {btnName , routeName } : 
-    {btnName : string , routeName : string}
+  { btnName, routeName }:
+    { btnName: string, routeName: string }
 ) {
   return (
     <Link
@@ -22,45 +22,71 @@ export function CreateButton(
 }
 
 export function UpdateButton(
-  {routeName } : 
-  { routeName : string}
+    { routeName, className } :
+    { routeName: string, className : string }
 ) {
-return (
-  <Link
+  return (
+    <Link
       href={routeName}
-      className="rounded-md border p-2 hover:bg-gray-100"
+      className={clsx(
+        'rounded-md border p-2 hover:bg-gray-100',
+        className
+      )}
     >
       <PencilIcon className="w-5" />
     </Link>
-);
+  );
 }
 
 export function CustomButton(
-  {routeName } : 
-  { routeName : string}
+  { routeName, className } :
+  { routeName: string, className : string }
 ) {
-return (
-  <Link
+  return (
+    <Link
       href={routeName}
-      className="rounded-md border p-2 bg-green-200 hover:bg-gray-100"
+      className={clsx(
+        'rounded-md border p-2 hover:bg-gray-100',
+        className
+      )}
     >
       <PhotoIcon className="w-5" />
     </Link>
-);
+  );
 }
 
+// export function CommentButton(
+//   { routeName, className } :
+//   { routeName: string, className : string }
+// ) {
+//   return (
+//     <Link
+//       href={routeName}
+//       className={clsx(
+//         'rounded-md border p-2 hover:bg-gray-100',
+//         className
+//       )}
+//     >
+//       <ChatBubbleBottomCenterTextIcon className="w-5" /><span>Comment</span>
+//     </Link>
+//   );
+// }
+
 export function DetailButton(
-  {routeName } : 
-  { routeName : string}
+  { routeName, className } :
+  { routeName: string, className : string }
 ) {
-return (
+  return (
     <Link
       href={routeName}
-      className="rounded-md border p-2 bg-blue-200 hover:bg-cyan-200"
+      className={clsx(
+        'flex items-center gap-2 px-2 py-2 text-gray-700 hover:bg-gray-100',
+        className
+      )}
     >
-      <EyeIcon className="w-5" />
+      <EyeIcon className="w-5" /><span>View</span>
     </Link>
-);
+  );
 }
 
 export function DeleteCategory({ id }: { id: string }) {
@@ -68,8 +94,8 @@ export function DeleteCategory({ id }: { id: string }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleDeleteClick = (event: React.FormEvent) => {
-      event.preventDefault();
-      setIsModalOpen(true);
+    event.preventDefault();
+    setIsModalOpen(true);
   };
 
   const handleConfirmDelete = () => {
@@ -91,11 +117,11 @@ export function DeleteCategory({ id }: { id: string }) {
       </form>
 
       <Modal
-      isOpen={isModalOpen}
-      onClose={handleCloseModal}
-      onConfirm={handleConfirmDelete}
-      title="Confirm Deletion"
-      message="Are you sure you want to delete this item?"
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onConfirm={handleConfirmDelete}
+        title="Confirm Deletion"
+        message="Are you sure you want to delete this item?"
       />
     </>
   );
@@ -107,8 +133,8 @@ export function DeleteBiz({ id }: { id: string }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleDeleteClick = (event: React.FormEvent) => {
-      event.preventDefault();
-      setIsModalOpen(true);
+    event.preventDefault();
+    setIsModalOpen(true);
   };
 
   const handleConfirmDelete = () => {
@@ -122,21 +148,23 @@ export function DeleteBiz({ id }: { id: string }) {
 
   return (
     <>
-    <form onSubmit={handleDeleteClick}>
-      <button className="rounded-md border p-2 bg-red-500 hover:bg-red-700">
-        <span className="sr-only">Delete</span>
-        <TrashIcon className="w-4 text-white" />
-      </button>
-    </form>
+      <div className="flex items-center gap-2 px-2 py-2 text-gray-700 hover:bg-gray-100">
+        <form onSubmit={handleDeleteClick}>
+          <button className="flex items-center gap-1">
+            <TrashIcon className="w-5" /><span>Delete</span>
+          </button>
+        </form>
 
-    <Modal
+      </div>
+
+      <Modal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         onConfirm={handleConfirmDelete}
         title="Confirm Deletion"
         message="Are you sure you want to delete this item?"
       />
-      </>
+    </>
   );
 }
 
@@ -161,14 +189,14 @@ export function DeleteRatingCategory({ id }: { id: string }) {
 
   return (
     <>
-    <form onSubmit={handleDeleteClick}>
-      <button className="rounded-md border p-2 bg-red-500 hover:bg-red-700">
-        <span className="sr-only">Delete</span>
-        <TrashIcon className="w-4 text-white" />
-      </button>
-    </form>
+      <form onSubmit={handleDeleteClick}>
+        <button className="rounded-md border p-2 bg-red-500 hover:bg-red-700">
+          <span className="sr-only">Delete</span>
+          <TrashIcon className="w-4 text-white" />
+        </button>
+      </form>
 
-    <Modal
+      <Modal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         onConfirm={handleConfirmDelete}
@@ -186,8 +214,8 @@ export function DeleteTag({ id }: { id: string }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleDeleteClick = (event: React.FormEvent) => {
-      event.preventDefault();
-      setIsModalOpen(true);
+    event.preventDefault();
+    setIsModalOpen(true);
   };
 
   const handleConfirmDelete = () => {
@@ -224,8 +252,8 @@ export function DeleteAddress({ id }: { id: string }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleDeleteClick = (event: React.FormEvent) => {
-      event.preventDefault();
-      setIsModalOpen(true);
+    event.preventDefault();
+    setIsModalOpen(true);
   };
 
   const handleConfirmDelete = () => {
@@ -247,11 +275,11 @@ export function DeleteAddress({ id }: { id: string }) {
       </form>
 
       <Modal
-      isOpen={isModalOpen}
-      onClose={handleCloseModal}
-      onConfirm={handleConfirmDelete}
-      title="Confirm Deletion"
-      message="Are you sure you want to delete this item?"
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onConfirm={handleConfirmDelete}
+        title="Confirm Deletion"
+        message="Are you sure you want to delete this item?"
       />
     </>
   );
@@ -262,8 +290,8 @@ export function DeleteBizImage({ id }: { id: string }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleDeleteClick = (event: React.FormEvent) => {
-      event.preventDefault();
-      setIsModalOpen(true);
+    event.preventDefault();
+    setIsModalOpen(true);
   };
 
   const handleConfirmDelete = () => {
@@ -285,11 +313,11 @@ export function DeleteBizImage({ id }: { id: string }) {
       </form>
 
       <Modal
-      isOpen={isModalOpen}
-      onClose={handleCloseModal}
-      onConfirm={handleConfirmDelete}
-      title="Confirm Deletion"
-      message="Are you sure you want to delete this item?"
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onConfirm={handleConfirmDelete}
+        title="Confirm Deletion"
+        message="Are you sure you want to delete this item?"
       />
     </>
   );

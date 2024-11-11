@@ -657,3 +657,172 @@ export const deleteAddress = async (id: string) => {
 
 };
 
+
+// =====================================
+
+  /** User Rating Route **/
+
+// =====================================
+
+export const fetchAllRatings = async () => {
+  noStore();
+  const supabase = createClient()
+  const { data, error } = await supabase
+    .from('bizs')
+    .select('id, name_en, name_mm, categories_id, categories (name_en)').range(0, 9);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data;
+};
+
+export const fetchRatingCount = async (
+page : number, query : string
+) => {
+  noStore();
+
+  const { from, to } = calculatePagination(page);
+  const supabase = createClient()
+  const { count } = await supabase.from('user_ratings')
+          .select('*', { count: 'exact', head : true }).ilike('comments', `%${query}%`);
+
+  const totalPages = Math.ceil((count || 0) / PAGE_SIZE);
+
+  return totalPages ;
+};
+
+export const fetchRatingPagination = async (
+page : number, query : string
+) => {
+  noStore();
+
+  const { from, to } = calculatePagination(page);
+  const supabase = createClient()
+  const { data, error, count } = await supabase.from('user_ratings')
+          .select('*,bizs(name_en)', { count: 'exact' }).ilike('comments', `%${query}%`) // Ensure to get the exact count
+          .range(from, to);
+
+  if (error) { throw new Error(error.message); }
+
+  return data;
+};
+
+
+// Read a single Rating by ID
+export const fetchRatingById = async (id: string) => {
+  const supabase = createClient()
+  const { data, error } = await supabase
+      .from('user_ratings')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data;
+};
+
+// Update a Rating by ID
+export const updateRating = async (id: string, bizData: {
+name_en?: string;
+name_mm?: string;
+categories_id?: string;
+logo?: string | File;
+}) => {
+const supabase = createClient()
+const { data, error } = await supabase.from('bizs').update(bizData).eq('id', id).select('id').single();
+
+return { data, error };
+};
+
+// Delete a Rating by ID
+export const deleteRating = async (id: string) => {
+const supabase = createClient()
+
+try {
+  const { data, error } = await supabase.from('bizs').delete().eq('id', id).select();
+
+  if (error) {
+    throw new Error('Failed to delete Biz');
+  }
+  
+  revalidatePath('/biz','layout');
+} catch (error) {
+  console.error('Error deleting Biz:');
+}
+
+};
+
+// Read Rating by Biz ID pagination
+export const fetchRatingCommentPagination = async (
+  id: string,
+  page : number
+) => {
+  await new Promise((resolve) => setTimeout(resolve, 3000));
+  const { from, to } = calculatePagination(page);
+  const supabase = createClient()
+  const { data, error } = await supabase
+  .from('user_ratings')
+  .select(`
+    *,
+    rating_values (
+      rating_category:rating_category_id ( id, name_en )
+    )
+  `)
+  .eq('biz_id', id)
+  .order('id', { ascending: true })
+  .range(from, to);
+    
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data;
+};
+
+// Rating Comment Count
+export const fetchRatingCommentCount = async (id: string) => {
+  const supabase = createClient()
+  const { count } = await supabase
+  .from('user_ratings')
+  .select('*', { count: 'exact', head : true })
+  .eq('biz_id', id);
+    
+  const totalPages = Math.ceil((count || 0) / PAGE_SIZE);
+
+  return totalPages;
+};
+
+// Rating Value
+export const fetchRatingValue = async (id: string) => {
+  const supabase = createClient()
+  const { data, error } = await supabase
+      .from('rating_values')
+      .select('*')
+      .eq('biz_id', id).select();
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data;
+};
+
+// Rating count by category
+export const getRatingCount = async (id: string) => {
+  const supabase = createClient()
+  const { data, error } = await supabase
+  .rpc('get_rating_values_count_by_category', {
+    biz_id: id
+  });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data;
+};

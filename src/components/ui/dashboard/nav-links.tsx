@@ -24,7 +24,7 @@ const links = [
   { name: 'Rating Category', href: '/dashboard/rating-categories', icon: ListBulletIcon },
   { name: 'Tag', href: '/dashboard/tags', icon: TagIcon },
   { name: 'Editor', href: '/dashboard/editors', icon: PencilIcon },
-  // { name: 'Rating', href: '/dashboard/ratings', icon: StarIcon },
+  // { name: 'Rating Lists', href: '/dashboard/ratings', icon: StarIcon },
 ]
 
 export default function NavLinks() {

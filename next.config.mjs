@@ -1,6 +1,11 @@
 const nextConfig = {
   images: {
-    domains: ['kljcviiammujoexobyjg.supabase.co'], // Just the domain, no 'https://'
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+    ],
   },
 };
 

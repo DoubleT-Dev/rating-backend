@@ -103,7 +103,7 @@ export default function DashboardSkeleton() {
 }
 
 
-{/* Category Skeleton */}
+{/* Category Skeleton */ }
 
 export function CategoriesTableRowSkeleton() {
   return (
@@ -120,7 +120,7 @@ export function CategoriesTableRowSkeleton() {
       <td className="whitespace-nowrap px-3 py-3">
         <div className="h-6 w-32 rounded bg-gray-100"></div>
       </td>
-  
+
       {/* Actions */}
       <td className="whitespace-nowrap py-3 pl-6 pr-3">
         <div className="flex justify-end gap-3">
@@ -135,7 +135,7 @@ export function CategoriesTableRowSkeleton() {
 export function CategoriesMobileSkeleton() {
   return (
     <div className="mb-2 w-full rounded-md bg-white p-4">
-    
+
       <div className="flex w-full items-center justify-between pt-4">
         <div>
           <div className="h-6 w-16 rounded bg-gray-100"></div>
@@ -196,7 +196,7 @@ export function CategoriesTableSkeleton() {
   );
 }
 
-{/* Biz Skeleton */}
+{/* Biz Skeleton */ }
 
 export function BizTableRowSkeleton() {
   return (
@@ -217,7 +217,7 @@ export function BizTableRowSkeleton() {
       <td className="whitespace-nowrap px-3 py-3">
         <div className="h-6 w-32 rounded bg-gray-100"></div>
       </td>
-  
+
       {/* Actions */}
       <td className="whitespace-nowrap py-3 pl-6 pr-3">
         <div className="flex justify-end gap-3">
@@ -232,7 +232,7 @@ export function BizTableRowSkeleton() {
 export function BizMobileSkeleton() {
   return (
     <div className="mb-2 w-full rounded-md bg-white p-4">
-    
+
       <div className="flex w-full items-center justify-between pt-4">
         <div>
           <div className="h-6 w-16 rounded bg-gray-100"></div>
@@ -300,7 +300,7 @@ export function BizTableSkeleton() {
   );
 }
 
-{/* Rating Category Skeleton */}
+{/* Rating Category Skeleton */ }
 export function RatingCategoriesTableRowSkeleton() {
   return (
     <tr className="w-full border-b border-gray-100 last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg">
@@ -316,7 +316,7 @@ export function RatingCategoriesTableRowSkeleton() {
       <td className="whitespace-nowrap px-3 py-3">
         <div className="h-6 w-32 rounded bg-gray-100"></div>
       </td>
-  
+
       {/* Actions */}
       <td className="whitespace-nowrap py-3 pl-6 pr-3">
         <div className="flex justify-end gap-3">
@@ -331,7 +331,7 @@ export function RatingCategoriesTableRowSkeleton() {
 export function RatingCategoriesMobileSkeleton() {
   return (
     <div className="mb-2 w-full rounded-md bg-white p-4">
-    
+
       <div className="flex w-full items-center justify-between pt-4">
         <div>
           <div className="h-6 w-16 rounded bg-gray-100"></div>
@@ -392,7 +392,7 @@ export function RatingCategoriesTableSkeleton() {
   );
 }
 
-{/* Customer Skeleton */}
+{/* Customer Skeleton */ }
 
 export function CustomerTableRowSkeleton() {
   return (
@@ -494,7 +494,7 @@ export function CustomerTableSkeleton() {
   );
 }
 
-{/* Tag Skeleton */}
+{/* Tag Skeleton */ }
 
 export function TagsTableRowSkeleton() {
   return (
@@ -507,7 +507,7 @@ export function TagsTableRowSkeleton() {
       <td className="whitespace-nowrap px-3 py-3">
         <div className="h-6 w-32 rounded bg-gray-100"></div>
       </td>
-  
+
       {/* Actions */}
       <td className="whitespace-nowrap py-3 pl-6 pr-3">
         <div className="flex justify-end gap-3">
@@ -522,7 +522,7 @@ export function TagsTableRowSkeleton() {
 export function TagsMobileSkeleton() {
   return (
     <div className="mb-2 w-full rounded-md bg-white p-4">
-    
+
       <div className="flex w-full items-center justify-between pt-4">
         <div>
           <div className="h-6 w-16 rounded bg-gray-100"></div>
@@ -584,7 +584,7 @@ export function TagsTableSkeleton() {
 }
 
 
-{/* Biz Address Skeleton */}
+{/* Biz Address Skeleton */ }
 
 export function BizAddressesTableRowSkeleton() {
   return (
@@ -632,7 +632,7 @@ export function BizAddressesTableRowSkeleton() {
 export function BizAddressesMobileSkeleton() {
   return (
     <div className="mb-2 w-full rounded-md bg-white p-4">
-    
+
       <div className="flex w-full items-center justify-between pt-4">
         <div>
           <div className="h-6 w-16 rounded bg-gray-100"></div>
@@ -722,6 +722,37 @@ export function BizAddressesTableSkeleton() {
 
             </tbody>
           </table>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function RatingCommentSkeleton() {
+  return (
+    <>
+      <RatingCommentRowSkeleton />
+      <RatingCommentRowSkeleton />
+      <RatingCommentRowSkeleton />
+      <RatingCommentRowSkeleton />
+      <RatingCommentRowSkeleton />
+    </>
+  );
+}
+
+export function RatingCommentRowSkeleton() {
+  return (
+    <div className="p-4 my-5 border rounded-xl animate-pulse">
+      <div className="flex items-start space-x-4">
+        <div className="w-8 h-8 bg-gray-200 rounded-full" />
+        <div className="flex-1 space-y-3">
+          <div className="h-4 w-1/4 bg-gray-200 rounded" />
+          <div className="h-3 w-1/3 bg-gray-200 rounded" />
+          <div className="mt-4 space-y-2">
+            <div className="h-3 w-full bg-gray-200 rounded" />
+            <div className="h-3 w-5/6 bg-gray-200 rounded" />
+          </div>
+
         </div>
       </div>
     </div>
