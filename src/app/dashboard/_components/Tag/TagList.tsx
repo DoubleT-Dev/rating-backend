@@ -50,6 +50,7 @@ export default async function TagList({
                     {/* Update and delete buttons will show on larger screens */}
                     <UpdateButton 
                         routeName={`/dashboard/tags/${tag.id}/edit`}
+                        className={''}
                      />
                     <DeleteTag id={tag.id}/>
                   </div>
