@@ -40,7 +40,7 @@ const RatingComment = async ({
                                     {
                                         comment.rating_values.map((category: any) => (
                                             <div className="flex flex-col items-center justify-center w-full h-auto p-2 bg-blue-50 rounded-xl">
-                                                <Image src="https://img.icons8.com/?size=100&id=112791&format=png&color=000000" width={30} height={30} className="mx-auto" alt="User" />
+                                                <Image src={category.rating_category.icon_link} width={30} height={30} className="mx-auto" alt="User" />
                                                 <p className="text-xs font-semibold text-gray-600 mt-2 text-nowrap">{category.rating_category.name_en}</p>
                                             </div>
                                         ))

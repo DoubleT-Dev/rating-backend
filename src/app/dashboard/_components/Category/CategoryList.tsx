@@ -56,7 +56,7 @@ export default async function CategoryList({
                   <div className="flex justify-end gap-3">
                     {/* Update and delete buttons will show on larger screens */}
                     <UpdateButton 
-                        routeName={`/dashboard/categories/${category.id}/edit`}
+                        routeName={`/dashboard/categories/${category.id}/edit`} className={''}
                      />
                     
                     <DeleteCategory id={category.id}/>

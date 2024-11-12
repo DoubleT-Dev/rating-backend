@@ -45,22 +45,22 @@ export async function createEditorAction(prevState: State, formData: FormData) {
         }
 
         try {
-            let image_link: string | null = null;
-        
-        if (typeof validatedFields.data.slide_image === 'string') {
-            const image_link = validatedFields.data.slide_image;
-        } else {
+                let image_link: string | null = null;
+            
+            if (typeof validatedFields.data.slide_image === 'string') {
+                const image_link = validatedFields.data.slide_image;
+            } else {
 
-            const {data : imgResp , error : imgErr } = await uploadImage('slide-images', validatedFields.data.slide_image);        
-    
-            if(imgErr || !imgResp) {
-                return {
-                    message : "Image Upload Error.",
+                const {data : imgResp , error : imgErr } = await uploadImage('slide-images', validatedFields.data.slide_image);        
+        
+                if(imgErr || !imgResp) {
+                    return {
+                        message : "Image Upload Error.",
+                    }
                 }
+        
+                const image_link = getImageUrl(imgResp.path);
             }
-    
-            const image_link = getImageUrl(imgResp.path);
-        }
 
             const bizData = {
                 slide_image: image_link,
@@ -128,9 +128,6 @@ export async function updateEditorAction(
                 image_link = validatedFields.data.slide_image;
             }
         }
-
-
-        console.log(image_link);
         
         const bizData = {
             slide_image: image_link,

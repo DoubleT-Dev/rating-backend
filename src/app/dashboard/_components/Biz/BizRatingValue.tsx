@@ -29,7 +29,7 @@ const BizRatingValue = ({ ratingValue }: any) => {
                             ratingValue.map((category: any) => (
                                 <div key={category.rating_category_id} className="relative bg-blue-50 p-4 rounded-xl">
                                     <Image
-                                        src="https://img.icons8.com/?size=100&id=112791&format=png&color=000000"
+                                        src={category.icon_link}
                                         width={50}
                                         height={50}
                                         alt="User"

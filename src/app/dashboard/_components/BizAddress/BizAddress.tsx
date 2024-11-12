@@ -75,7 +75,7 @@ export default function BizAddress({ addresses , id}: any) {
                     <td className="whitespace-nowrap py-3 pl-6 pr-3 hidden sm:table-cell">
                     <div className="flex justify-end gap-3">
                         {/* Update and delete buttons will show on larger screens */}
-                        <UpdateButton routeName={`/dashboard/addresses/${address.id}/edit`} />
+                        <UpdateButton routeName={`/dashboard/addresses/${address.id}/edit`} className={''} />
                         <DeleteAddress id={address.id} />
                     </div>
                     </td>

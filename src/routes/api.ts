@@ -39,7 +39,9 @@ export const fetchBizCount = async (
     const { from, to } = calculatePagination(page);
     const supabase = createClient()
     const { count } = await supabase.from('bizs')
-            .select('*', { count: 'exact', head : true }).ilike('name_en', `%${query}%`);
+            .select('*', { count: 'exact', head : true })
+            .order('id', { ascending: true })
+            .ilike('name_en', `%${query}%`);
 
     const totalPages = Math.ceil((count || 0) / PAGE_SIZE);
 
@@ -54,7 +56,9 @@ export const fetchBizPagination = async (
     const { from, to } = calculatePagination(page);
     const supabase = createClient()
     const { data, error, count } = await supabase.from('bizs')
-            .select('id, name_en, name_mm, logo, categories_id, is_active, categories (name_en)', { count: 'exact' }).ilike('name_en', `%${query}%`) // Ensure to get the exact count
+            .select('id, name_en, name_mm, logo, categories_id, is_active, categories (name_en)', { count: 'exact' })
+            .ilike('name_en', `%${query}%`)
+            .order('id', { ascending: true })
             .range(from, to);
 
     if (error) { throw new Error(error.message); }
@@ -228,7 +232,7 @@ export const deleteBizImage = async (id: string) => {
 
 export const fetchAllCategory = async () => {
   const supabase = createClient()
-    const { data, error } = await supabase.from('categories').select('*'); 
+    const { data, error } = await supabase.from('categories').select('*').order('id', { ascending: true }); 
     return data;
 };
 
@@ -318,7 +322,8 @@ export const fetchRatingCategoryPagination = async (page : number, query : strin
     
     const supabase = createClient()
     const { data, error, count } = await supabase.from('rating_categories')
-            .select('*', { count: 'exact' }).ilike('name_en', `%${query}%`) // Ensure to get the exact count
+            .select('*', { count: 'exact' }).ilike('name_en', `%${query}%`)
+            .order('id', { ascending: true })
             .range(from, to);
 
     const totalPages = Math.ceil((count || 1) / PAGE_SIZE);
@@ -332,6 +337,7 @@ export const fetchRatingCategoryPagination = async (page : number, query : strin
 export const insertRatingCategory = async (categoryData: {
   name_en: string;
   name_mm: string;
+  icon_link: string | null;
 }) => {
   const supabase = createClient()
   const { data, error } = await supabase.from('rating_categories').insert([categoryData]).select();
@@ -342,11 +348,12 @@ export const insertRatingCategory = async (categoryData: {
 export const updateRatingCategory = async (id : string , ratingCategoryData: {
   name_en: string;
   name_mm: string;
+  icon_link: string | File;
 }) => {
   const supabase = createClient();
 
   const { data, error } = await supabase.from('rating_categories').update([ratingCategoryData]).eq('id', id).select();
-
+console.log(data);
   return {data , error};
 };
 
@@ -770,7 +777,7 @@ export const fetchRatingCommentPagination = async (
   .select(`
     *,
     rating_values (
-      rating_category:rating_category_id ( id, name_en )
+      rating_category:rating_category_id ( id, name_en, icon_link )
     )
   `)
   .eq('biz_id', id)

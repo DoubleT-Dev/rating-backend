@@ -1,6 +1,7 @@
 import { DeleteCategory, DeleteRatingCategory, UpdateButton } from '@/components/ui/action-button';
 import Status from '@/components/ui/status';
 import { RatingCategory } from '@/types/rating-category';
+import Image from 'next/image'
 
 export default async function CategoryList({
   query,
@@ -23,6 +24,9 @@ export default async function CategoryList({
           <thead className="rounded-lg text-left text-sm font-normal">
             <tr>
               <th scope="col" className="px-3 py-5 font-medium">
+              Icon
+              </th>
+              <th scope="col" className="px-3 py-5 font-medium">
               Rating Category Name (English)
               </th>
               <th scope="col" className="px-3 py-5 font-medium">
@@ -44,6 +48,15 @@ export default async function CategoryList({
                 className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
               >
                 <td className="whitespace-nowrap px-3 py-3">
+                <Image
+                          src={category.icon_link}
+                          width={100}
+                          height={100}
+                          alt={category.name_en}
+                          priority
+                      />
+                </td>
+                <td className="whitespace-nowrap px-3 py-3">
                   {category.name_en}
                 </td>
                 <td className="whitespace-nowrap px-3 py-3">
@@ -57,8 +70,7 @@ export default async function CategoryList({
                   <div className="flex justify-end gap-3">
                     {/* Update and delete buttons will show on larger screens */}
                     <UpdateButton 
-                        routeName={`/dashboard/rating-categories/${category.id}/edit`}
-                     />
+                      routeName={`/dashboard/rating-categories/${category.id}/edit`} className={''}                     />
                     
                     <DeleteRatingCategory  id={category.id}/>
                   </div>

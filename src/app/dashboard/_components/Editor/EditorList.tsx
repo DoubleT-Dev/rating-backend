@@ -72,10 +72,9 @@ export default async function EditorList({
                     <div className="flex justify-end gap-3">
                       {/* Update and delete buttons will show on larger screens */}
                       <UpdateButton
-                        routeName={`/dashboard/editors/${editor.id}/edit`}
-                      />
+                        routeName={`/dashboard/editors/${editor.id}/edit`} className={''}                      />
 
-                      <DetailButton routeName={`/dashboard/editors/${editor.id}/detail`} />
+                      <DetailButton routeName={`/dashboard/editors/${editor.id}/detail`} className={''} />
 
                       <DeleteBiz id={editor.id} />
                     </div>
