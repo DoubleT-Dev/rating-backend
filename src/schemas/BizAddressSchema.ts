@@ -18,6 +18,7 @@ export const BizAddressSchema = z.object({
   township: z.string().nullable(),
   region: z.string().nullable(),
   logo: z.instanceof(File),
+  cover_photo: z.instanceof(File),
 });
 
 export type BizAddressSchemaType = z.infer<typeof BizAddressSchema>;

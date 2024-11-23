@@ -5,14 +5,14 @@ import { revalidatePath } from 'next/cache';
 import { insertRatingCategory, updateRatingCategory } from '@/routes/api';
 import { RatingCategorySchema } from '@/schemas/RatingCategorySchema';
 import { createClient } from '@/utils/supabase/server';
-import { uploadImage } from '@/app/lib/utils';
+import { getImageUrl, uploadImage } from '@/app/lib/utils';
 
-const getImageUrl = (filename: string) => {
-    const supabase = createClient()
-    const { data } = supabase.storage.from('rating-bucket').getPublicUrl(filename)
+// const getImageUrl = (filename: string) => {
+//     const supabase = createClient()
+//     const { data } = supabase.storage.from('rating-bucket').getPublicUrl(filename)
 
-    return data.publicUrl;
-};
+//     return data.publicUrl;
+// };
 
 export type State = {
   errors?: {
@@ -40,10 +40,10 @@ export async function createRatingCategoryAction(prevState: State, formData: For
     }
 
     try {
-        let image_link: string | null = null;
+        var image_link: string | null = null;
             
         if (typeof validatedFields.data.icon_link === 'string') {
-            const image_link = validatedFields.data.icon_link;
+            image_link = validatedFields.data.icon_link;
         } else {
 
             const {data : imgResp , error : imgErr } = await uploadImage('rating-categories', validatedFields.data.icon_link);        
@@ -54,7 +54,7 @@ export async function createRatingCategoryAction(prevState: State, formData: For
                 }
             }
     
-            const image_link = getImageUrl(imgResp.path);
+            image_link = getImageUrl(imgResp.path);
         }
 
         const ratingCategoryData = {
@@ -98,7 +98,7 @@ export async function updateRatingCategoryAction(
         };
     }
 
-    let image_link: string | File = "/no-image.png";
+    var image_link: string | File = "/no-image.png";
 
     try {
         console.log(validatedFields.data.icon_link instanceof File);

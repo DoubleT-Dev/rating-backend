@@ -45,7 +45,7 @@ export async function createEditorAction(prevState: State, formData: FormData) {
         }
 
         try {
-                let image_link: string | null = null;
+            var image_link: string | null = null;
             
             if (typeof validatedFields.data.slide_image === 'string') {
                 const image_link = validatedFields.data.slide_image;
@@ -59,7 +59,7 @@ export async function createEditorAction(prevState: State, formData: FormData) {
                     }
                 }
         
-                const image_link = getImageUrl(imgResp.path);
+                image_link = getImageUrl(imgResp.path);
             }
 
             const bizData = {
@@ -108,7 +108,7 @@ export async function updateEditorAction(
         };
     }
     
-    let image_link: string | File = "/no-image.png";
+    var image_link: string | File = "/no-image.png";
     
     try {
 
@@ -136,8 +136,6 @@ export async function updateEditorAction(
             biz_id: validatedFields.data.biz_id,
             is_active: validatedFields.data.is_active,
         };
-
-        console.log(bizData);
 
         const {data , error } = await updateEditor(id, bizData);        
         

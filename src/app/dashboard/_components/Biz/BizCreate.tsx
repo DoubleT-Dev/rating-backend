@@ -16,12 +16,18 @@ export default function BizCreate({
   categories: Category[] | null
 }) {
   const [previews, setPreviews] = useState<string>("/no-image.png");
+  const [coverPreviews, setCoverPreviews] = useState<string>("/no-image.png");
   const initialState = { errors: {}, message: undefined };
   const [state, dispatch] = useFormState(createBizAction, initialState);
 
   const handleImageChange = (event: any) => {
     const files = event.target.files[0];
     setPreviews(URL.createObjectURL(files));
+  };
+
+  const handleCoverImageChange = (event: any) => {
+    const files = event.target.files[0];
+    setCoverPreviews(URL.createObjectURL(files));
   };
 
   return (
@@ -33,31 +39,54 @@ export default function BizCreate({
         <fieldset className="rounded-md bg-blue-50 p-4 md:p-6">
           <legend className="mb-1 text-lg font-semibold">Biz Infomation</legend>
 
-          <div className="mb-4">
-            <label htmlFor="logo" className="mb-2 block text-sm font-medium">
-              Biz Logo
-            </label>
-            <div className="relative mt-2 rounded-md">
-
-              <div className="relative">
-
-                <div className="preview-edit">
-                  <img src={previews} alt="preview" style={{ width: '150px' }} />
+          <div className="row grid grid-cols-2 gap-4">
+            <div className="mb-4">
+              <label htmlFor="logo" className="mb-2 block text-sm font-medium">
+                Biz Logo
+              </label>
+              <div className="relative mt-2 rounded-md">
+                <div className="relative">
+                  <div className="preview-edit">
+                    <img src={previews} alt="preview" style={{ width: '150px' }} />
+                  </div>
+                  <input
+                    id="logo"
+                    name="logo"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    className="peer block w-full rounded-md border border-gray-200 py-2 pl-3 text-sm outline-2 placeholder:text-gray-500"
+                    aria-describedby="biz-error-left"
+                  />
                 </div>
-
-                <input
-                  id="logo"
-                  name="logo"
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  className="peer block w-full rounded-md border border-gray-200 py-2 pl-3 text-sm outline-2 placeholder:text-gray-500"
-                  aria-describedby="biz-error"
-                />
+                <ValidateError id="logo" message={state?.errors?.logo} />
               </div>
-              <ValidateError id='logo' message={state?.errors?.logo} />
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="cover_photo" className="mb-2 block text-sm font-medium">
+                Biz Cover Photo
+              </label>
+              <div className="relative mt-2 rounded-md">
+                <div className="relative">
+                  <div className="preview-edit">
+                    <img src={coverPreviews} alt="preview" style={{ width: '150px' }} />
+                  </div>
+                  <input
+                    id="cover_photo"
+                    name="cover_photo"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleCoverImageChange}
+                    className="peer block w-full rounded-md border border-gray-200 py-2 pl-3 text-sm outline-2 placeholder:text-gray-500"
+                    aria-describedby="biz-error-right"
+                  />
+                </div>
+                <ValidateError id="cover_photo" message={state?.errors?.cover_photo} />
+              </div>
             </div>
           </div>
+
 
           <div className="mb-4">
             <label className="mb-2 block text-sm font-medium">Category</label>

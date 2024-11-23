@@ -9,6 +9,7 @@ export const BizSchema = z.object({
   is_active : z.string().nullable(),
   description: z.string().nullable(),
   logo: z.union([z.instanceof(File), z.string()]),
+  cover_photo: z.union([z.instanceof(File), z.string()]),
 });
 
 export type BizSchemaType = z.infer<typeof BizSchema>;

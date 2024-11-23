@@ -50,11 +50,24 @@ export const generatePagination = (currentPage: number, totalPages: number) => {
 export const uploadImage = async (folderName : string, file : File) => 
 {
 	const supabase = createClient();
+  
 	const { data, error } = await supabase.storage
 			.from("rating-bucket") // Replace with your bucket name
-			.upload(`${folderName}/${Date.now()}_${file.name}`, file);
+			.upload(`${folderName}/${Date.now()}_${sanitizeFileName(file.name)}`, file);
 
 	return { data, error };
 
 };
 
+export function sanitizeFileName(fileName : string) {
+  return fileName
+    .replace(/ /g, '_')       // Replace spaces with underscores
+    .replace(/[^a-zA-Z0-9_.-]/g, ''); // Remove non-ASCII characters
+}
+
+export function getImageUrl (filename: string) {
+  const supabase = createClient()
+  const { data } = supabase.storage.from('rating-bucket').getPublicUrl(filename)
+
+  return data.publicUrl;
+};

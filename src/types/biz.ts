@@ -4,6 +4,7 @@ import { Address } from './address';
 export type Biz = {
     id: string;
     name_en: string;
+    cover_photo: string;
     logo: string;
     name_mm: string;
     categories_id : string;

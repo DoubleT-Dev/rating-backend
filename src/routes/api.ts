@@ -75,7 +75,7 @@ export const insertBiz = async (bizData: {
 }) => {
   const supabase = createClient()
   const { data, error } = await supabase.from('bizs').insert([bizData]).select('id').single();
-
+console.log(error);
   return { data, error };
 };
 
