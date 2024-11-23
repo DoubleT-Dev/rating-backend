@@ -14,6 +14,7 @@ const PAGE_SIZE = parseInt(process.env.PAGE_SIZE!);
 
 
 
+
 /** Biz Route **/
 // =====================================
 
@@ -833,3 +834,54 @@ export const getRatingCount = async (id: string) => {
 
   return data;
 };
+
+// Setting
+export const insertSetting = async (settingData: {
+  key: string;
+  value: string;
+}) => {
+  const supabase = createClient()
+  const { data, error } = await supabase.from('settings').insert([settingData]).select();
+  return {data , error };
+};
+
+export const fetchSetting = async () => {
+  noStore();
+  const supabase = createClient()
+  const { data, error } = await supabase
+    .from('settings')
+    .select('*');
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data;
+};
+
+export const fetchSettingById = async (id: string) => {
+  const supabase = createClient()
+  const { data, error } = await supabase
+    .from('settings')
+    .select('*')
+    .eq('id', id)
+    .single();
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data;
+};
+
+export const updateSetting = async (id: string, settingData: {
+  key: string;
+  value: string;
+  }) => {
+  const supabase = createClient()
+  const { data, error } = await supabase.from('settings')
+  .update(settingData).eq('id', id)
+  .select('*').select();
+  
+  return { data, error };
+  };

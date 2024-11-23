@@ -5,9 +5,8 @@ import { AtSymbolIcon, KeyIcon, ExclamationCircleIcon } from '@heroicons/react/2
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { Button } from '../../components/ui/button';
 import { useState, FormEvent } from 'react'; // Use useState for error handling
-import { login } from "@/app/login/action";
+import { login, signup } from "@/app/login/action";
 import { useFormStatus } from 'react-dom';
-import { useRouter } from 'next/router';
 
 export default function LoginForm() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null); // State for error message

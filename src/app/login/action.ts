@@ -5,30 +5,37 @@ import { redirect } from 'next/navigation'
 
 import { createClient } from '@/utils/supabase/server'
 
-export async function login(    
-    formData: FormData
+export async function login(
+  formData: FormData
 ) {
   const supabase = createClient()
 
-  const data = {
-    email: formData.get('email') as string,
-    password: formData.get('password') as string,
+  const email = formData.get('email') as string
+  const password = formData.get('password') as string
+
+  try {
+    const { error } = await supabase.auth.signInWithPassword({ email, password })
+
+    if (error) {
+      throw new Error(error?.message)
+    }
+
+    revalidatePath('/dashboard', 'layout')
+    redirect('/dashboard')
+  } catch (error : any) {
+    // Handle specific error types
+    if (error.message.includes('Invalid email or password')) {
+      // Display a specific error message to the user
+    } else {
+      // Handle general errors
+    }
+
+    throw error
   }
-
-  const { error } = await supabase.auth.signInWithPassword(data);
-
-  if (error) {
-    // Return the error to be handled on the client side
-    throw new Error(error?.message);
-  }
-
-  revalidatePath('/dashboard', 'layout');
-  redirect('/dashboard')
-
 }
 
 export async function signup(formData: FormData) {
-  const supabase = await createClient()
+  const supabase = createClient()
 
   // type-casting here for convenience
   // in practice, you should validate your inputs
@@ -38,7 +45,7 @@ export async function signup(formData: FormData) {
   }
 
   const { error } = await supabase.auth.signUp(data)
-
+console.log(error);
   if (error) {
     redirect('/error')
   }
